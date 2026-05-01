@@ -14,23 +14,31 @@ body {
   margin: 0;
   background: #0b0f17;
   color: white;
-  transition: 0.3s;
 }
 
-header {
-  text-align: center;
+/* LOGIN */
+#login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginBox {
+  background: #1f2937;
   padding: 20px;
-  font-size: 22px;
-  font-weight: bold;
+  border-radius: 14px;
+  width: 300px;
 }
 
-.container {
+/* APP */
+#app {
+  display: none;
   max-width: 800px;
   margin: auto;
   padding: 15px;
 }
 
-/* CARD */
 .card {
   background: #1f2937;
   padding: 15px;
@@ -38,7 +46,17 @@ header {
   margin-bottom: 15px;
 }
 
-/* BUTTON */
+/* INPUT + BUTTON */
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #111827;
+  color: white;
+}
+
 button {
   width: 100%;
   padding: 12px;
@@ -51,17 +69,6 @@ button {
   cursor: pointer;
 }
 
-/* INPUT */
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: none;
-  background: #111827;
-  color: white;
-}
-
 /* MEMBER */
 .member {
   background: #111827;
@@ -69,62 +76,42 @@ input {
   border-radius: 10px;
   margin-top: 8px;
 }
-
-/* SETTINGS BOX */
-#settingsBox {
-  display: none;
-  margin-top: 10px;
-  background: #111827;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* LIGHT MODE */
-.light {
-  background: #f3f4f6;
-  color: black;
-}
-
-.light .card {
-  background: white;
-  color: black;
-}
-
-.light input {
-  background: #e5e7eb;
-  color: black;
-}
-
-.light .member {
-  background: #e5e7eb;
-}
-
-.light #settingsBox {
-  background: #e5e7eb;
-}
 </style>
 </head>
 
 <body>
 
-<header>Community Hub</header>
+<!-- 🔐 LOGIN -->
+<div id="login">
+  <div class="loginBox">
+    <h3>👤 Criar Perfil</h3>
 
-<div class="container">
+    <input id="nameInput" placeholder="Nome">
 
-  <!-- 👤 PROFILE -->
+    <select id="statusInput">
+      <option value="online">🟢 Online</option>
+      <option value="dnd">🌙 Não incomodar</option>
+      <option value="offline">⚫ Offline</option>
+    </select>
+
+    <button onclick="createProfile()">Entrar</button>
+  </div>
+</div>
+
+<!-- 🌐 APP -->
+<div id="app">
+
+  <!-- PROFILE -->
   <div class="card">
     <h3>👤 Perfil</h3>
 
-    <p>Nome: <b id="userDisplay">Anónimo</b></p>
-    <p>Estado: 🟢 Online</p>
-
-    <input id="profileName" placeholder="Mudar nome">
-    <button onclick="saveProfile()">💾 Guardar perfil</button>
+    <p id="profileName">Nome</p>
+    <p id="profileStatus">Estado</p>
   </div>
 
-  <!-- 🔗 LINKS -->
+  <!-- LINKS -->
   <div class="card">
-    <h3>🔗 Liga-te</h3>
+    <h3>🔗 Links</h3>
 
     <button onclick="window.open('https://discord.com','_blank')">
       Discord
@@ -133,17 +120,9 @@ input {
     <button onclick="window.open('https://youtube.com','_blank')">
       YouTube
     </button>
-
-    <button onclick="toggleSettings()">⚙️ Definições</button>
-
-    <!-- SETTINGS -->
-    <div id="settingsBox">
-      <button onclick="toggleTheme()">🌙 / ☀️ Tema</button>
-      <button onclick="clearMembers()">🧹 Limpar membros</button>
-    </div>
   </div>
 
-  <!-- 👥 MEMBERS -->
+  <!-- MEMBERS -->
   <div class="card">
     <h3>👥 Membros</h3>
 
@@ -159,27 +138,43 @@ input {
 
 let members = JSON.parse(localStorage.getItem("members") || "[]");
 
-/* 👤 PROFILE */
-function saveProfile() {
-  let name = document.getElementById("profileName").value;
+/* CREATE PROFILE */
+function createProfile() {
+  let name = document.getElementById("nameInput").value;
+  let status = document.getElementById("statusInput").value;
+
   if (!name) return;
 
   localStorage.setItem("username", name);
-  document.getElementById("userDisplay").innerText = name;
-  document.getElementById("profileName").value = "";
+  localStorage.setItem("status", status);
+
+  loadProfile();
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
 }
 
-/* carregar perfil */
-window.onload = function () {
+/* LOAD PROFILE */
+function loadProfile() {
   let name = localStorage.getItem("username");
-  if (name) {
-    document.getElementById("userDisplay").innerText = name;
+  let status = localStorage.getItem("status");
+
+  document.getElementById("profileName").innerText = "👤 " + name;
+
+  if (status === "online") {
+    document.getElementById("profileStatus").innerText = "🟢 Online";
   }
 
-  render();
-};
+  if (status === "dnd") {
+    document.getElementById("profileStatus").innerText = "🌙 Não incomodar";
+  }
 
-/* 👥 MEMBERS */
+  if (status === "offline") {
+    document.getElementById("profileStatus").innerText = "⚫ Offline";
+  }
+}
+
+/* MEMBERS */
 function addMember() {
   let name = document.getElementById("memberName").value;
   if (!name) return;
@@ -188,6 +183,7 @@ function addMember() {
   localStorage.setItem("members", JSON.stringify(members));
 
   document.getElementById("memberName").value = "";
+
   render();
 }
 
@@ -203,22 +199,18 @@ function render() {
   });
 }
 
-/* ⚙️ SETTINGS */
-function toggleSettings() {
-  let box = document.getElementById("settingsBox");
-  box.style.display = box.style.display === "block" ? "none" : "block";
-}
+render();
 
-/* 🌙 THEME */
-function toggleTheme() {
-  document.body.classList.toggle("light");
-}
+/* AUTO LOGIN */
+window.onload = function () {
+  let name = localStorage.getItem("username");
 
-/* 🧹 CLEAR */
-function clearMembers() {
-  localStorage.removeItem("members");
-  location.reload();
-}
+  if (name) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    loadProfile();
+  }
+};
 
 </script>
 
