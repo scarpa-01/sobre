@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>FPS Boost Launcher</title>
+  <title>Game Launcher</title>
 
   <style>
     body {
       margin: 0;
       font-family: Arial;
-      background: #0a0f1c;
+      background: #0b0f17;
       color: white;
-      overflow: hidden;
+      display: flex;
     }
 
-    /* SIDEBAR */
     .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
       width: 220px;
-      height: 100%;
-      background: #0f172a;
+      background: #111827;
+      height: 100vh;
       padding: 20px;
     }
 
@@ -31,46 +27,40 @@
 
     .nav button {
       width: 100%;
-      margin-top: 10px;
       padding: 10px;
+      margin-top: 10px;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
-      background: #1e293b;
+      background: #1f2937;
       color: white;
-      transition: 0.2s;
+      cursor: pointer;
     }
 
     .nav button:hover {
       background: #3b82f6;
     }
 
-    /* MAIN */
     .main {
-      margin-left: 240px;
-      padding: 30px;
+      flex: 1;
+      padding: 20px;
     }
 
     .card {
-      background: rgba(255,255,255,0.05);
+      background: #1f2937;
       padding: 15px;
-      border-radius: 12px;
+      border-radius: 10px;
       margin-bottom: 15px;
-      backdrop-filter: blur(10px);
     }
 
     button {
-      padding: 10px;
       width: 100%;
+      padding: 10px;
+      margin-top: 10px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-top: 8px;
       font-weight: bold;
-      transition: 0.2s;
     }
-
-    button:hover { transform: scale(1.05); }
 
     .green { background: #22c55e; }
     .blue { background: #3b82f6; }
@@ -82,73 +72,91 @@
       margin-top: 8px;
       border-radius: 6px;
       border: none;
+      outline: none;
       background: #111827;
       color: white;
     }
 
-    /* SKIN SWITCH */
-    .skin-dark { background: #0a0f1c; }
-    .skin-light { background: #f1f5f9; color: black; }
-
-    /* FLOATING ICONS */
-    .icon {
-      position: absolute;
-      font-size: 20px;
-      opacity: 0.2;
-      animation: float 6s infinite linear;
+    .review {
+      background: #111827;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
     }
 
-    @keyframes float {
-      from { transform: translateY(100vh); }
-      to { transform: translateY(-10vh); }
+    .smallbtn {
+      width: auto;
+      padding: 5px 10px;
+      margin-top: 5px;
+      margin-right: 5px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
     }
 
-    /* FPS DISPLAY */
     .fps {
-      font-size: 18px;
       color: #22c55e;
+      font-weight: bold;
     }
 
+    .hidden { display: none; }
+
+    /* MUSIC BUTTON */
+    .music {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: #3b82f6;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
 
+<!-- MUSIC -->
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3?filename=cyberpunk-moonlight-ambient-12049.mp3" type="audio/mpeg">
+</audio>
+
+<div class="music" onclick="toggleMusic()">🎵 Music</div>
+
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="logo">🥔 FPS Launcher</div>
+  <div class="logo">🎮 Launcher</div>
 
   <div class="nav">
-    <button onclick="switchTab('home')">Home</button>
-    <button onclick="switchTab('boost')">Boost</button>
-    <button onclick="switchTab('reviews')">Reviews</button>
-    <button onclick="toggleSkin()">Change Theme</button>
+    <button onclick="show('home')">Home</button>
+    <button onclick="show('boost')">Boost</button>
+    <button onclick="show('reviews')">Reviews</button>
   </div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-  <!-- HOME -->
   <div id="home">
     <div class="card">
       <h2>Welcome 👋</h2>
-      <p>This is a FPS Boost Launcher UI (Steam style)</p>
+      <p>Roblox-style launcher UI</p>
     </div>
   </div>
 
-  <!-- BOOST -->
-  <div id="boost" style="display:none;">
+  <div id="boost" class="hidden">
     <div class="card">
-      <h3>⚡ Boost Modes</h3>
-      <button class="green" onclick="setFPS(80)">🥔 Potato Mode</button>
-      <button class="blue" onclick="setFPS(40)">⚖️ Balanced Mode</button>
+      <h3>⚡ FPS Boost</h3>
+
+      <button class="green" onclick="setFPS(80)">Potato Mode</button>
+      <button class="blue" onclick="setFPS(40)">Balanced Mode</button>
+
       <p class="fps" id="fps">FPS Boost: 0%</p>
     </div>
   </div>
 
-  <!-- REVIEWS -->
-  <div id="reviews" style="display:none;">
+  <div id="reviews" class="hidden">
     <div class="card">
       <h3>💬 Reviews</h3>
 
@@ -165,28 +173,27 @@
 
 <script>
 
-/* FLOATING ICONS */
-for (let i = 0; i < 15; i++) {
-  let d = document.createElement("div");
-  d.className = "icon";
-  d.innerText = "⚡";
-  d.style.left = Math.random() * window.innerWidth + "px";
-  d.style.animationDuration = (3 + Math.random() * 5) + "s";
-  document.body.appendChild(d);
+let playing = false;
+const music = document.getElementById("bgm");
+
+/* MUSIC */
+function toggleMusic() {
+  if (!playing) {
+    music.play();
+    playing = true;
+  } else {
+    music.pause();
+    playing = false;
+  }
 }
 
-/* TABS */
-function switchTab(tab) {
-  document.getElementById("home").style.display = "none";
-  document.getElementById("boost").style.display = "none";
-  document.getElementById("reviews").style.display = "none";
+/* NAV */
+function show(page) {
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("boost").classList.add("hidden");
+  document.getElementById("reviews").classList.add("hidden");
 
-  document.getElementById(tab).style.display = "block";
-}
-
-/* SKIN */
-function toggleSkin() {
-  document.body.classList.toggle("skin-light");
+  document.getElementById(page).classList.remove("hidden");
 }
 
 /* FPS */
@@ -202,14 +209,34 @@ function add() {
   if (!n || !t) return;
 
   let div = document.createElement("div");
-  div.className = "card";
+  div.className = "review";
 
   div.innerHTML = `
     <b>${n}</b><br>${t}<br>
-    <button class="red" onclick="this.parentElement.remove()">Delete</button>
+    <button class="smallbtn blue" onclick="edit(this)">Edit</button>
+    <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
   `;
 
   document.getElementById("list").appendChild(div);
+
+  document.getElementById("name").value = "";
+  document.getElementById("text").value = "";
+}
+
+/* EDIT */
+function edit(btn) {
+  let box = btn.parentElement;
+  let old = box.innerText.split("\n")[1];
+
+  let newText = prompt("Edit:", old);
+
+  if (newText) {
+    box.innerHTML = `
+      <b>${box.querySelector("b").innerText}</b><br>${newText}<br>
+      <button class="smallbtn blue" onclick="edit(this)">Edit</button>
+      <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
+    `;
+  }
 }
 
 </script>
