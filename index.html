@@ -1,40 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Community Hub</title>
-
 <style>
+* {
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
 body {
   margin: 0;
-  font-family: Arial;
-  background: #0b0f17;
+  background: radial-gradient(circle at top, #111827, #0b0f17);
   color: white;
 }
 
-/* HEADER */
+/* HEADER SIMPLES */
 header {
-  padding: 20px;
   text-align: center;
-  background: #111827;
-  font-size: 20px;
+  padding: 25px;
+  font-size: 22px;
   font-weight: bold;
+  letter-spacing: 1px;
 }
 
 /* CONTAINER */
 .container {
-  max-width: 700px;
+  max-width: 800px;
   margin: auto;
   padding: 15px;
 }
 
-/* CARD */
+/* CARDS */
 .card {
-  background: #1f2937;
-  padding: 15px;
-  border-radius: 12px;
+  background: rgba(31, 41, 55, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 18px;
+  border-radius: 14px;
   margin-bottom: 15px;
-  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 /* BUTTONS */
@@ -43,104 +47,60 @@ button {
   padding: 12px;
   margin-top: 10px;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  color: white;
   font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.discord { background: #5865F2; color: white; }
-.youtube { background: #ef4444; color: white; }
-.join { background: #22c55e; color: white; }
+button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* LINKS */
+a {
+  text-decoration: none;
+}
 
 /* INPUT */
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 8px;
-  border-radius: 6px;
+  border-radius: 10px;
   border: none;
-  background: #0f172a;
+  background: #111827;
   color: white;
+  outline: none;
 }
 
+/* LISTA */
 .list {
   margin-top: 10px;
-  text-align: left;
-  font-size: 14px;
 }
 
 .item {
-  background: #0f172a;
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 6px;
+  background: #111827;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+/* SMALL TEXT */
+small {
+  color: #9ca3af;
+}
+
+/* RESPONSIVO */
+@media (max-width: 600px) {
+  header {
+    font-size: 18px;
+  }
+}
 </style>
-</head>
-
-<body>
-
-<header>🌐 Community Hub</header>
-
-<div class="container">
-
-  <!-- LINKS -->
-  <div class="card">
-    <h3>🔗 Liga-te à comunidade</h3>
-
-    <button class="discord" onclick="window.open('https://discord.com','_blank')">
-      Entrar no Discord
-    </button>
-
-    <button class="youtube" onclick="window.open('https://youtube.com','_blank')">
-      Ir ao YouTube
-    </button>
-  </div>
-
-  <!-- INSCRIÇÃO -->
-  <div class="card">
-    <h3>📩 Inscreve-te na comunidade</h3>
-
-    <input id="name" placeholder="O teu nome">
-    <button class="join" onclick="join()">Inscrever</button>
-
-    <div class="list" id="list"></div>
-  </div>
-
-</div>
-
-<script>
-
-let users = JSON.parse(localStorage.getItem("users") || "[]");
-
-function join() {
-  let name = document.getElementById("name").value;
-  if (!name) return;
-
-  users.push(name);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  document.getElementById("name").value = "";
-
-  render();
-}
-
-function render() {
-  let box = document.getElementById("list");
-  box.innerHTML = "";
-
-  users.forEach(u => {
-    let div = document.createElement("div");
-    div.className = "item";
-    div.innerText = "👤 " + u;
-    box.appendChild(div);
-  });
-}
-
-render();
-
-</script>
-
-</body>
-</html>
