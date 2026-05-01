@@ -1,228 +1,217 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>FPS Boost Pack</title>
+  <title>FPS Boost Launcher</title>
 
   <style>
     body {
       margin: 0;
       font-family: Arial;
-      background: radial-gradient(circle at top, #111827, #0b0b0f);
+      background: #0a0f1c;
       color: white;
-      text-align: center;
+      overflow: hidden;
     }
 
-    .banner {
-      padding: 50px 20px;
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background: #0f172a;
+      padding: 20px;
     }
 
-    .title {
-      font-size: 38px;
+    .logo {
+      font-size: 20px;
       font-weight: bold;
-      animation: glow 2s infinite alternate;
+      margin-bottom: 20px;
     }
 
-    @keyframes glow {
-      from { text-shadow: 0 0 5px #3b82f6; }
-      to { text-shadow: 0 0 20px #22c55e; }
+    .nav button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #1e293b;
+      color: white;
+      transition: 0.2s;
     }
 
-    .container {
-      max-width: 750px;
-      margin: auto;
+    .nav button:hover {
+      background: #3b82f6;
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: 240px;
+      padding: 30px;
     }
 
     .card {
       background: rgba(255,255,255,0.05);
       padding: 15px;
-      margin: 15px;
       border-radius: 12px;
+      margin-bottom: 15px;
       backdrop-filter: blur(10px);
     }
 
     button {
-      padding: 12px;
+      padding: 10px;
       width: 100%;
-      margin-top: 10px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      margin-top: 8px;
       font-weight: bold;
       transition: 0.2s;
     }
 
-    button:hover {
-      transform: scale(1.05);
-    }
+    button:hover { transform: scale(1.05); }
 
-    .green { background: #22c55e; color: white; }
-    .blue { background: #3b82f6; color: white; }
+    .green { background: #22c55e; }
+    .blue { background: #3b82f6; }
+    .red { background: #ef4444; }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: #111827;
-      color: white;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    input::placeholder {
-      color: #9ca3af;
-    }
-
-    input:focus {
-      border: 1px solid #3b82f6;
-    }
-
-    .review {
-      background: #222;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      text-align: left;
-    }
-
-    .smallbtn {
-      width: auto;
-      padding: 5px 10px;
-      margin-right: 5px;
+      padding: 8px;
       margin-top: 8px;
       border-radius: 6px;
       border: none;
-      cursor: pointer;
-      font-weight: bold;
+      background: #111827;
+      color: white;
     }
 
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1f2937;
-      padding: 10px 15px;
-      border-radius: 8px;
-      opacity: 0;
-      transition: 0.3s;
+    /* SKIN SWITCH */
+    .skin-dark { background: #0a0f1c; }
+    .skin-light { background: #f1f5f9; color: black; }
+
+    /* FLOATING ICONS */
+    .icon {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0.2;
+      animation: float 6s infinite linear;
     }
 
-    .show {
-      opacity: 1;
+    @keyframes float {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-10vh); }
     }
+
+    /* FPS DISPLAY */
+    .fps {
+      font-size: 18px;
+      color: #22c55e;
+    }
+
   </style>
 </head>
 
 <body>
 
-<div class="banner">
-  <div class="title">🥔 FPS BOOST PACK</div>
-  <p>Optimize Roblox performance easily</p>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">🥔 FPS Launcher</div>
+
+  <div class="nav">
+    <button onclick="switchTab('home')">Home</button>
+    <button onclick="switchTab('boost')">Boost</button>
+    <button onclick="switchTab('reviews')">Reviews</button>
+    <button onclick="toggleSkin()">Change Theme</button>
+  </div>
 </div>
 
-<div class="container">
+<!-- MAIN -->
+<div class="main">
 
-  <!-- MODOS -->
-  <div class="card">
-    <h3>⚡ Modes</h3>
-    <button class="green" onclick="copyPotato()">🥔 Potato Mode</button>
-    <button class="blue" onclick="copyBalanced()">⚖️ Balanced Mode</button>
+  <!-- HOME -->
+  <div id="home">
+    <div class="card">
+      <h2>Welcome 👋</h2>
+      <p>This is a FPS Boost Launcher UI (Steam style)</p>
+    </div>
   </div>
 
-  <!-- INFO -->
-  <div class="card">
-    <h3>🧠 What it does</h3>
-    <p>Reduces graphics load and improves FPS stability for smoother gameplay.</p>
+  <!-- BOOST -->
+  <div id="boost" style="display:none;">
+    <div class="card">
+      <h3>⚡ Boost Modes</h3>
+      <button class="green" onclick="setFPS(80)">🥔 Potato Mode</button>
+      <button class="blue" onclick="setFPS(40)">⚖️ Balanced Mode</button>
+      <p class="fps" id="fps">FPS Boost: 0%</p>
+    </div>
   </div>
 
-  <!-- OPINIÕES -->
-  <div class="card">
-    <h3>💬 Community Opinions</h3>
+  <!-- REVIEWS -->
+  <div id="reviews" style="display:none;">
+    <div class="card">
+      <h3>💬 Reviews</h3>
 
-    <input id="name" placeholder="Your name">
-    <input id="opinion" placeholder="Write your opinion...">
+      <input id="name" placeholder="Name">
+      <input id="text" placeholder="Opinion">
 
-    <button class="green" onclick="addOpinion()">Submit</button>
+      <button class="green" onclick="add()">Submit</button>
 
-    <div id="list"></div>
+      <div id="list"></div>
+    </div>
   </div>
 
 </div>
-
-<div id="toast" class="toast">Copied!</div>
 
 <script>
-function showToast(text) {
-  const toast = document.getElementById("toast");
-  toast.innerText = text;
-  toast.classList.add("show");
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 1500);
+/* FLOATING ICONS */
+for (let i = 0; i < 15; i++) {
+  let d = document.createElement("div");
+  d.className = "icon";
+  d.innerText = "⚡";
+  d.style.left = Math.random() * window.innerWidth + "px";
+  d.style.animationDuration = (3 + Math.random() * 5) + "s";
+  document.body.appendChild(d);
 }
 
-function copyPotato() {
-  navigator.clipboard.writeText(`
-{
-  "DFIntTaskSchedulerTargetFps": "60",
-  "FIntRenderShadowIntensity": "0",
-  "DFIntTextureQualityOverride": "0"
-}
-  `);
-  showToast("🥔 Potato copied!");
+/* TABS */
+function switchTab(tab) {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("boost").style.display = "none";
+  document.getElementById("reviews").style.display = "none";
+
+  document.getElementById(tab).style.display = "block";
 }
 
-function copyBalanced() {
-  navigator.clipboard.writeText(`
-{
-  "DFIntTaskSchedulerTargetFps": "120",
-  "FIntRenderShadowIntensity": "0"
-}
-  `);
-  showToast("⚖️ Balanced copied!");
+/* SKIN */
+function toggleSkin() {
+  document.body.classList.toggle("skin-light");
 }
 
-/* 💬 OPINIÕES */
-function addOpinion() {
-  const name = document.getElementById("name").value.trim();
-  const text = document.getElementById("opinion").value.trim();
+/* FPS */
+function setFPS(v) {
+  document.getElementById("fps").innerText = "FPS Boost: +" + v + "%";
+}
 
-  if (!name || !text) return;
+/* REVIEWS */
+function add() {
+  let n = document.getElementById("name").value;
+  let t = document.getElementById("text").value;
 
-  const div = document.createElement("div");
-  div.className = "review";
+  if (!n || !t) return;
+
+  let div = document.createElement("div");
+  div.className = "card";
 
   div.innerHTML = `
-    <b>${name}:</b><br>
-    <span class="opinion-text">${text}</span><br>
-
-    <button class="smallbtn blue" onclick="editOpinion(this)">Edit</button>
-    <button class="smallbtn" style="background:#ef4444;color:white;" onclick="deleteOpinion(this)">Delete</button>
+    <b>${n}</b><br>${t}<br>
+    <button class="red" onclick="this.parentElement.remove()">Delete</button>
   `;
 
   document.getElementById("list").appendChild(div);
-
-  document.getElementById("name").value = "";
-  document.getElementById("opinion").value = "";
 }
 
-function deleteOpinion(btn) {
-  btn.closest(".review").remove();
-}
-
-function editOpinion(btn) {
-  const review = btn.closest(".review");
-  const textEl = review.querySelector(".opinion-text");
-
-  const newText = prompt("Edit your opinion:", textEl.innerText);
-
-  if (newText !== null && newText.trim() !== "") {
-    textEl.innerText = newText;
-  }
-}
 </script>
 
 </body>
