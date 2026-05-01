@@ -12,11 +12,13 @@
       display: flex;
     }
 
+    /* SIDEBAR */
     .sidebar {
       width: 220px;
       background: #111827;
       height: 100vh;
       padding: 20px;
+      box-sizing: border-box;
     }
 
     .logo {
@@ -40,6 +42,7 @@
       background: #3b82f6;
     }
 
+    /* MAIN */
     .main {
       flex: 1;
       padding: 20px;
@@ -75,6 +78,7 @@
       outline: none;
       background: #111827;
       color: white;
+      box-sizing: border-box;
     }
 
     .review {
@@ -92,6 +96,7 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
+      font-weight: bold;
     }
 
     .fps {
@@ -102,7 +107,7 @@
     .hidden { display: none; }
 
     /* MUSIC BUTTON */
-    .music {
+    .musicBtn {
       position: fixed;
       bottom: 15px;
       right: 15px;
@@ -111,6 +116,7 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: bold;
+      user-select: none;
     }
   </style>
 </head>
@@ -119,10 +125,10 @@
 
 <!-- MUSIC -->
 <audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3?filename=cyberpunk-moonlight-ambient-12049.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3" type="audio/mpeg">
 </audio>
 
-<div class="music" onclick="toggleMusic()">🎵 Music</div>
+<div class="musicBtn" onclick="toggleMusic(this)">▶ Play Music</div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -177,12 +183,14 @@ let playing = false;
 const music = document.getElementById("bgm");
 
 /* MUSIC */
-function toggleMusic() {
+function toggleMusic(btn) {
   if (!playing) {
     music.play();
+    btn.innerText = "🔇 Mute Music";
     playing = true;
   } else {
     music.pause();
+    btn.innerText = "▶ Play Music";
     playing = false;
   }
 }
@@ -213,6 +221,7 @@ function add() {
 
   div.innerHTML = `
     <b>${n}</b><br>${t}<br>
+
     <button class="smallbtn blue" onclick="edit(this)">Edit</button>
     <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
   `;
