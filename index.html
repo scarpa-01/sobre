@@ -1,71 +1,260 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Game Launcher</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #0b0f17;
-      color: white;
-      display: flex;
-    }
+<title>Game Launcher</title>
 
-    .sidebar {
-      width: 220px;
-      background: #111827;
-      height: 100vh;
-      padding: 20px;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b0f17;
+  color: white;
+  display: flex;
+}
 
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
 
-    .nav button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #1f2937;
-      color: white;
-      cursor: pointer;
-    }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
 
-    .nav button:hover {
-      background: #3b82f6;
-    }
+  .nav button {
+    width: auto;
+    margin: 5px;
+  }
+}
 
-    .main {
-      flex: 1;
-      padding: 20px;
-    }
+.sidebar {
+  width: 220px;
+  background: #111827;
+  height: 100vh;
+  padding: 20px;
+}
 
-    .card {
-      background: #1f2937;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.nav button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #1f2937;
+  color: white;
+  cursor: pointer;
+}
 
-    .green { background: #22c55e; }
-    .blue { background: #3b82f6; }
-    .red { background: #ef4444; }
+.nav button:hover {
+  background: #3b82f6;
+}
 
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+.card {
+  background: #1f2937;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.green { background: #22c55e; }
+.blue { background: #3b82f6; }
+.red { background: #ef4444; }
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: none;
+  background: #111827;
+  color: white;
+}
+
+.review {
+  background: #111827;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+.smallbtn {
+  width: auto;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.fps {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.musicBox {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: #3b82f6;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+}
+.hidden { display: none; }
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3" type="audio/mpeg">
+</audio>
+
+<div class="sidebar">
+  <div class="logo">🎮 Launcher</div>
+
+  <div class="nav">
+    <button onclick="show('home')">Home</button>
+    <button onclick="show('boost')">Boost</button>
+    <button onclick="show('reviews')">Reviews</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <div id="home">
+    <div class="card">
+      <h2>Welcome 👋</h2>
+      <p>Launcher melhorado + mobile fix</p>
+    </div>
+  </div>
+
+  <div id="boost" class="hidden">
+    <div class="card">
+      <h3>⚡ FPS Boost</h3>
+
+      <button class="green" onclick="setMode('potato')">🥔 Potato Mode</button>
+      <button class="blue" onclick="setMode('balanced')">⚖️ Balanced</button>
+
+      <p class="fps" id="fps">FPS Boost: 0%</p>
+    </div>
+  </div>
+
+  <div id="reviews" class="hidden">
+    <div class="card">
+      <h3>💬 Reviews</h3>
+
+      <input id="name" placeholder="Name">
+      <input id="text" placeholder="Opinion">
+
+      <button class="green" onclick="add()">Submit</button>
+
+      <div id="list"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="musicBox">
+  <button onclick="toggleMusic(this)">▶ Play Music</button>
+  <input type="range" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
+</div>
+
+<script>
+
+const music = document.getElementById("bgm");
+let playing = false;
+
+function toggleMusic(btn) {
+  if (!playing) {
+    music.play();
+    btn.innerText = "🔇 Mute";
+    playing = true;
+  } else {
+    music.pause();
+    btn.innerText = "▶ Play Music";
+    playing = false;
+  }
+}
+
+function setVolume(v) {
+  music.volume = v;
+}
+
+function setMode(mode) {
+  if (mode === "potato") {
+    document.getElementById("fps").innerText = "FPS Boost: +80%";
+  } else {
+    document.getElementById("fps").innerText = "FPS Boost: +40%";
+  }
+}
+
+function show(page) {
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("boost").classList.add("hidden");
+  document.getElementById("reviews").classList.add("hidden");
+  document.getElementById(page).classList.remove("hidden");
+}
+
+function add() {
+  let n = document.getElementById("name").value;
+  let t = document.getElementById("text").value;
+
+  if (!n || !t) return;
+
+  let div = document.createElement("div");
+  div.className = "review";
+
+  div.innerHTML = `
+    <b>${n}</b><br>${t}<br>
+    <button class="smallbtn blue" onclick="edit(this)">Edit</button>
+    <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
+  `;
+
+  document.getElementById("list").appendChild(div);
+}
+
+function edit(btn) {
+  let box = btn.parentElement;
+  let text = box.childNodes[2].textContent;
+
+  let newText = prompt("Edit:", text);
+  if (newText) {
+    box.childNodes[2].textContent = newText;
+  }
+}
+
+</script>
+
+</body>
+</html>
     input {
       width: 100%;
       padding: 8px;
