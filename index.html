@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roblox FPS Boost</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
+      padding: 60px;
+    }
+
+    .box {
+      background: #1c1c1c;
+      padding: 25px;
+      border-radius: 12px;
+      display: inline-block;
+      width: 300px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .green { background: #22c55e; color: white; }
+    .blue { background: #3b82f6; color: white; }
+    .gray { background: #555; color: white; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>🥔 FPS Boost</h1>
+  <p>Roblox performance pack</p>
+
+  <button class="green" onclick="copyPotato()">Potato Config</button>
+  <button class="blue" onclick="copyBalanced()">Balanced Config</button>
+  <button class="gray" onclick="showInfo()">How to use</button>
+</div>
+
+<script>
+function copyPotato() {
+  navigator.clipboard.writeText(`
+{
+  "DFIntTaskSchedulerTargetFps": "60",
+  "FIntRenderShadowIntensity": "0",
+  "DFIntTextureQualityOverride": "0"
+}
+  `);
+  alert("Copied Potato Config!");
+}
+
+function copyBalanced() {
+  navigator.clipboard.writeText(`
+{
+  "DFIntTaskSchedulerTargetFps": "120",
+  "FIntRenderShadowIntensity": "0"
+}
+  `);
+  alert("Copied Balanced Config!");
+}
+
+function showInfo() {
+  alert("Paste this in Fishstrap Fast Flags!");
+}
+</script>
+
+</body>
+</html>
