@@ -12,41 +12,29 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #111827, #0b0f17);
+  background: #0b0f17;
   color: white;
   transition: 0.3s;
 }
 
-/* HEADER */
 header {
   text-align: center;
-  padding: 22px;
-  font-size: 24px;
+  padding: 20px;
+  font-size: 22px;
   font-weight: bold;
-  letter-spacing: 1px;
 }
 
-/* CONTAINER */
 .container {
   max-width: 800px;
   margin: auto;
   padding: 15px;
 }
 
-/* GLASS CARD */
 .card {
-  background: rgba(31, 41, 55, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 16px;
-  border-radius: 16px;
+  background: #1f2937;
+  padding: 15px;
+  border-radius: 14px;
   margin-bottom: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
 }
 
 /* BUTTON */
@@ -55,42 +43,38 @@ button {
   padding: 12px;
   margin-top: 10px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  border-radius: 10px;
+  background: #3b82f6;
   color: white;
   font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-button:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
 }
 
 /* INPUT */
 input {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   margin-top: 8px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   background: #111827;
   color: white;
-  outline: none;
 }
 
 /* MEMBER */
 .member {
-  background: rgba(17, 24, 39, 0.8);
+  background: #111827;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: 10px;
   margin-top: 8px;
-  transition: 0.2s;
 }
 
-.member:hover {
-  transform: translateX(4px);
+/* SETTINGS BOX */
+#settingsBox {
+  display: none;
+  background: #111827;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
 }
 
 /* LIGHT MODE */
@@ -112,6 +96,10 @@ input {
 .light .member {
   background: #e5e7eb;
 }
+
+.light #settingsBox {
+  background: #e5e7eb;
+}
 </style>
 </head>
 
@@ -123,7 +111,7 @@ input {
 
   <!-- LINKS -->
   <div class="card">
-    <h3>🔗 Liga-te</h3>
+    <h3>🔗 Links</h3>
 
     <button onclick="window.open('https://discord.com','_blank')">
       Discord
@@ -133,7 +121,11 @@ input {
       YouTube
     </button>
 
-    <button onclick="openSettings()">⚙️ Definições</button>
+    <button onclick="toggleSettings()">⚙️ Definições</button>
+
+    <div id="settingsBox">
+      <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
+    </div>
   </div>
 
   <!-- MEMBERS -->
@@ -146,27 +138,18 @@ input {
     <div id="members"></div>
   </div>
 
-  <!-- SETTINGS -->
-  <div class="card hidden" id="settings">
-    <h3>⚙️ Definições</h3>
-
-    <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
-    <button onclick="closeSettings()">🔙 Voltar</button>
-  </div>
-
 </div>
 
 <script>
 
 let members = JSON.parse(localStorage.getItem("members") || "[]");
-let dark = true;
 
-/* ADD MEMBER */
+/* MEMBERS */
 function addMember() {
   let name = document.getElementById("memberName").value;
   if (!name) return;
 
-  members.push({ name });
+  members.push(name);
   localStorage.setItem("members", JSON.stringify(members));
 
   document.getElementById("memberName").value = "";
@@ -174,7 +157,6 @@ function addMember() {
   render();
 }
 
-/* RENDER */
 function render() {
   let box = document.getElementById("members");
   box.innerHTML = "";
@@ -182,24 +164,17 @@ function render() {
   members.forEach(m => {
     let div = document.createElement("div");
     div.className = "member";
-    div.innerText = "@ " + m.name;
+    div.innerText = "@ " + m;
     box.appendChild(div);
   });
 }
 
 render();
 
-/* SETTINGS NAV */
-function openSettings() {
-  document.querySelectorAll(".card")[0].style.display = "none";
-  document.querySelectorAll(".card")[1].style.display = "none";
-  document.getElementById("settings").classList.remove("hidden");
-}
-
-function closeSettings() {
-  document.getElementById("settings").classList.add("hidden");
-  document.querySelectorAll(".card")[0].style.display = "block";
-  document.querySelectorAll(".card")[1].style.display = "block";
+/* SETTINGS */
+function toggleSettings() {
+  let box = document.getElementById("settingsBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
 /* THEME */
