@@ -30,6 +30,7 @@ header {
   padding: 15px;
 }
 
+/* CARD */
 .card {
   background: #1f2937;
   padding: 15px;
@@ -47,6 +48,7 @@ button {
   background: #3b82f6;
   color: white;
   font-weight: bold;
+  cursor: pointer;
 }
 
 /* INPUT */
@@ -71,10 +73,10 @@ input {
 /* SETTINGS BOX */
 #settingsBox {
   display: none;
+  margin-top: 10px;
   background: #111827;
   padding: 10px;
   border-radius: 10px;
-  margin-top: 10px;
 }
 
 /* LIGHT MODE */
@@ -109,9 +111,20 @@ input {
 
 <div class="container">
 
-  <!-- LINKS -->
+  <!-- 👤 PROFILE -->
   <div class="card">
-    <h3>🔗 Links</h3>
+    <h3>👤 Perfil</h3>
+
+    <p>Nome: <b id="userDisplay">Anónimo</b></p>
+    <p>Estado: 🟢 Online</p>
+
+    <input id="profileName" placeholder="Mudar nome">
+    <button onclick="saveProfile()">💾 Guardar perfil</button>
+  </div>
+
+  <!-- 🔗 LINKS -->
+  <div class="card">
+    <h3>🔗 Liga-te</h3>
 
     <button onclick="window.open('https://discord.com','_blank')">
       Discord
@@ -123,12 +136,14 @@ input {
 
     <button onclick="toggleSettings()">⚙️ Definições</button>
 
+    <!-- SETTINGS -->
     <div id="settingsBox">
-      <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
+      <button onclick="toggleTheme()">🌙 / ☀️ Tema</button>
+      <button onclick="clearMembers()">🧹 Limpar membros</button>
     </div>
   </div>
 
-  <!-- MEMBERS -->
+  <!-- 👥 MEMBERS -->
   <div class="card">
     <h3>👥 Membros</h3>
 
@@ -144,7 +159,27 @@ input {
 
 let members = JSON.parse(localStorage.getItem("members") || "[]");
 
-/* MEMBERS */
+/* 👤 PROFILE */
+function saveProfile() {
+  let name = document.getElementById("profileName").value;
+  if (!name) return;
+
+  localStorage.setItem("username", name);
+  document.getElementById("userDisplay").innerText = name;
+  document.getElementById("profileName").value = "";
+}
+
+/* carregar perfil */
+window.onload = function () {
+  let name = localStorage.getItem("username");
+  if (name) {
+    document.getElementById("userDisplay").innerText = name;
+  }
+
+  render();
+};
+
+/* 👥 MEMBERS */
 function addMember() {
   let name = document.getElementById("memberName").value;
   if (!name) return;
@@ -153,7 +188,6 @@ function addMember() {
   localStorage.setItem("members", JSON.stringify(members));
 
   document.getElementById("memberName").value = "";
-
   render();
 }
 
@@ -169,17 +203,21 @@ function render() {
   });
 }
 
-render();
-
-/* SETTINGS */
+/* ⚙️ SETTINGS */
 function toggleSettings() {
   let box = document.getElementById("settingsBox");
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
-/* THEME */
+/* 🌙 THEME */
 function toggleTheme() {
   document.body.classList.toggle("light");
+}
+
+/* 🧹 CLEAR */
+function clearMembers() {
+  localStorage.removeItem("members");
+  location.reload();
 }
 
 </script>
