@@ -12,30 +12,41 @@
 
 body {
   margin: 0;
-  background: #0b0f17;
+  background: radial-gradient(circle at top, #111827, #0b0f17);
   color: white;
   transition: 0.3s;
 }
 
+/* HEADER */
 header {
   text-align: center;
-  padding: 18px;
-  font-size: 22px;
+  padding: 22px;
+  font-size: 24px;
   font-weight: bold;
+  letter-spacing: 1px;
 }
 
+/* CONTAINER */
 .container {
   max-width: 800px;
   margin: auto;
   padding: 15px;
 }
 
-/* CARD */
+/* GLASS CARD */
 .card {
-  background: #1f2937;
-  padding: 15px;
-  border-radius: 12px;
+  background: rgba(31, 41, 55, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 16px;
+  border-radius: 16px;
   margin-bottom: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 /* BUTTON */
@@ -44,35 +55,42 @@ button {
   padding: 12px;
   margin-top: 10px;
   border: none;
-  border-radius: 10px;
-  background: #3b82f6;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
   color: white;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
 }
 
 /* INPUT */
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 8px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   background: #111827;
   color: white;
+  outline: none;
 }
 
 /* MEMBER */
 .member {
-  background: #111827;
+  background: rgba(17, 24, 39, 0.8);
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-top: 8px;
+  transition: 0.2s;
 }
 
-/* SETTINGS PAGE */
-.hidden {
-  display: none;
+.member:hover {
+  transform: translateX(4px);
 }
 
 /* LIGHT MODE */
@@ -103,9 +121,8 @@ input {
 
 <div class="container">
 
-  <!-- HOME -->
-  <div class="card" id="home">
-
+  <!-- LINKS -->
+  <div class="card">
     <h3>🔗 Liga-te</h3>
 
     <button onclick="window.open('https://discord.com','_blank')">
@@ -131,13 +148,10 @@ input {
 
   <!-- SETTINGS -->
   <div class="card hidden" id="settings">
-
     <h3>⚙️ Definições</h3>
 
     <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
-
     <button onclick="closeSettings()">🔙 Voltar</button>
-
   </div>
 
 </div>
@@ -177,19 +191,19 @@ render();
 
 /* SETTINGS NAV */
 function openSettings() {
-  document.getElementById("home").style.display = "none";
+  document.querySelectorAll(".card")[0].style.display = "none";
+  document.querySelectorAll(".card")[1].style.display = "none";
   document.getElementById("settings").classList.remove("hidden");
 }
 
 function closeSettings() {
   document.getElementById("settings").classList.add("hidden");
-  document.getElementById("home").style.display = "block";
+  document.querySelectorAll(".card")[0].style.display = "block";
+  document.querySelectorAll(".card")[1].style.display = "block";
 }
 
 /* THEME */
 function toggleTheme() {
-  dark = !dark;
-
   document.body.classList.toggle("light");
 }
 
