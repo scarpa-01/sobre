@@ -5,45 +5,72 @@
 
   <style>
     body {
-      font-family: Arial;
-      background: #0f0f0f;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
       color: white;
       text-align: center;
       padding: 60px;
     }
 
     .box {
-      background: #1c1c1c;
-      padding: 25px;
-      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 16px;
       display: inline-block;
-      width: 300px;
+      width: 320px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      opacity: 0.8;
     }
 
     button {
-      padding: 10px 15px;
+      padding: 12px 18px;
       margin: 8px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
     }
 
     .green { background: #22c55e; color: white; }
     .blue { background: #3b82f6; color: white; }
     .gray { background: #555; color: white; }
+
+    .green:hover { box-shadow: 0 0 10px #22c55e; }
+    .blue:hover { box-shadow: 0 0 10px #3b82f6; }
+    .gray:hover { box-shadow: 0 0 10px #999; }
+
+    .tag {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 10px;
+    }
   </style>
 </head>
 
 <body>
 
 <div class="box">
-  <h1>🥔 FPS Boost</h1>
-  <p>Roblox performance pack</p>
+  <h1>🥔 FPS Boost Pack</h1>
+  <p>Better performance for Roblox</p>
 
-  <button class="green" onclick="copyPotato()">Potato Config</button>
-  <button class="blue" onclick="copyBalanced()">Balanced Config</button>
-  <button class="gray" onclick="showInfo()">How to use</button>
+  <button class="green" onclick="copyPotato()">🥔 Potato</button>
+  <button class="blue" onclick="copyBalanced()">⚖️ Balanced</button>
+  <button class="gray" onclick="showInfo()">❓ Help</button>
+
+  <div class="tag">Made for low-end PCs</div>
 </div>
 
 <script>
@@ -55,7 +82,7 @@ function copyPotato() {
   "DFIntTextureQualityOverride": "0"
 }
   `);
-  alert("Copied Potato Config!");
+  alert("🥔 Potato config copied!");
 }
 
 function copyBalanced() {
@@ -65,7 +92,7 @@ function copyBalanced() {
   "FIntRenderShadowIntensity": "0"
 }
   `);
-  alert("Copied Balanced Config!");
+  alert("⚖️ Balanced config copied!");
 }
 
 function showInfo() {
