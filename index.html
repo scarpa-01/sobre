@@ -1,45 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Roblox FPS Boost</title>
+  <title>FPS Boost Pack</title>
 
   <style>
     body {
+      margin: 0;
       font-family: Arial;
-      background: #0f0f0f;
+      background: #0b0b0f;
       color: white;
+    }
+
+    .banner {
+      background: linear-gradient(90deg, #1b1b2f, #16213e);
+      padding: 40px;
       text-align: center;
-      padding: 50px;
     }
 
-    .box {
-      background: #1c1c1c;
-      padding: 25px;
-      border-radius: 12px;
-      display: inline-block;
-      width: 360px;
+    .title {
+      font-size: 32px;
+      font-weight: bold;
     }
 
-    h1 { margin-bottom: 5px; }
-
-    .desc {
-      font-size: 14px;
+    .subtitle {
       opacity: 0.7;
-      margin-bottom: 20px;
+      margin-top: 5px;
     }
 
-    .section {
-      text-align: left;
-      margin: 15px 0;
-      padding: 10px;
-      background: #222;
-      border-radius: 8px;
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1c1c25;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
     }
 
     button {
-      width: 100%;
       padding: 10px;
-      margin-top: 8px;
+      margin-top: 10px;
+      width: 100%;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -49,31 +53,42 @@
     .green { background: #22c55e; color: white; }
     .blue { background: #3b82f6; color: white; }
 
-    .small {
+    .tag {
+      display: inline-block;
+      background: #333;
+      padding: 5px 10px;
+      border-radius: 20px;
       font-size: 12px;
-      opacity: 0.6;
-      margin-top: 5px;
+      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="banner">
+  <div class="title">🥔 FPS Boost Pack</div>
+  <div class="subtitle">Optimize Roblox performance for low-end PCs</div>
+  <div class="tag">Free Tool • Community Configs</div>
+</div>
 
-  <h1>🥔 FPS Boost Tool</h1>
-  <div class="desc">Improve Roblox performance on low-end PCs</div>
+<div class="container">
 
-  <div class="section">
-    <b>🥔 Potato Mode</b>
-    <div class="small">Lowest graphics, maximum FPS stability</div>
-    <button class="green" onclick="copyPotato()">Copy Potato Config</button>
+  <div class="card">
+    <h3>🥔 Potato Mode</h3>
+    <p>Maximum FPS, lowest graphics. Best for weak PCs.</p>
+    <button class="green" onclick="copyPotato()">Download / Copy Config</button>
   </div>
 
-  <div class="section">
-    <b>⚖️ Balanced Mode</b>
-    <div class="small">Good FPS + normal visuals</div>
-    <button class="blue" onclick="copyBalanced()">Copy Balanced Config</button>
+  <div class="card">
+    <h3>⚖️ Balanced Mode</h3>
+    <p>Good FPS with normal visuals.</p>
+    <button class="blue" onclick="copyBalanced()">Download / Copy Config</button>
+  </div>
+
+  <div class="card">
+    <h3>⚔️ Competitive Mode</h3>
+    <p>Stable FPS for PvP games like battlegrounds.</p>
   </div>
 
 </div>
