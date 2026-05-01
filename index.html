@@ -58,7 +58,6 @@
     .green { background: #22c55e; color: white; }
     .blue { background: #3b82f6; color: white; }
 
-    /* INPUTS CORRIGIDOS */
     input {
       width: 100%;
       padding: 10px;
@@ -101,6 +100,14 @@
 
     .show {
       opacity: 1;
+    }
+
+    .smallbtn {
+      width: auto;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-top: 5px;
+      border-radius: 6px;
     }
   </style>
 </head>
@@ -175,6 +182,7 @@ function copyBalanced() {
   showToast("⚖️ Balanced copied!");
 }
 
+/* OPINIÕES */
 function addOpinion() {
   const name = document.getElementById("name").value;
   const text = document.getElementById("opinion").value;
@@ -183,12 +191,34 @@ function addOpinion() {
 
   const div = document.createElement("div");
   div.className = "review";
-  div.innerHTML = "<b>" + name + ":</b><br>" + text;
+
+  div.innerHTML = `
+    <b>${name}:</b><br>
+    <span class="text">${text}</span><br>
+
+    <button class="smallbtn blue" onclick="editOpinion(this)">Edit</button>
+    <button class="smallbtn" style="background:#ef4444;color:white;" onclick="deleteOpinion(this)">Delete</button>
+  `;
 
   document.getElementById("list").appendChild(div);
 
   document.getElementById("name").value = "";
   document.getElementById("opinion").value = "";
+}
+
+function deleteOpinion(btn) {
+  btn.parentElement.remove();
+}
+
+function editOpinion(btn) {
+  const parent = btn.parentElement;
+  const textSpan = parent.querySelector(".text");
+
+  const newText = prompt("Edit your opinion:", textSpan.innerText);
+
+  if (newText) {
+    textSpan.innerText = newText;
+  }
 }
 </script>
 
