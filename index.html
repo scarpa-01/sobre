@@ -51,10 +51,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  opacity: 0.9;
-}
-
 /* INPUT */
 input {
   width: 100%;
@@ -74,9 +70,10 @@ input {
   margin-top: 8px;
 }
 
-/* LINKS BUTTONS */
-.discord { background: #5865F2; }
-.youtube { background: #ef4444; }
+/* SETTINGS PAGE */
+.hidden {
+  display: none;
+}
 
 /* LIGHT MODE */
 .light {
@@ -106,43 +103,41 @@ input {
 
 <div class="container">
 
-  <!-- LINKS -->
-  <div class="card">
+  <!-- HOME -->
+  <div class="card" id="home">
+
     <h3>🔗 Liga-te</h3>
 
-    <button class="discord"
-      onclick="window.open('https://discord.com','_blank')">
-      Entrar no Discord
+    <button onclick="window.open('https://discord.com','_blank')">
+      Discord
     </button>
 
-    <button class="youtube"
-      onclick="window.open('https://youtube.com','_blank')">
-      Ir ao YouTube
+    <button onclick="window.open('https://youtube.com','_blank')">
+      YouTube
     </button>
-  </div>
 
-  <!-- SETTINGS -->
-  <div class="card">
-    <h3>⚙️ Definições</h3>
-
-    <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
-
-    <p style="margin-top:10px;">
-      ℹ️ Este site é um hub simples para comunidade, links e membros.
-    </p>
-  </div>
-
-  <!-- ADD MEMBER -->
-  <div class="card">
-    <h3>Adicionar membro</h3>
-    <input id="memberName" placeholder="Username">
-    <button onclick="addMember()">Adicionar</button>
+    <button onclick="openSettings()">⚙️ Definições</button>
   </div>
 
   <!-- MEMBERS -->
   <div class="card">
-    <h3>Membros</h3>
+    <h3>👥 Membros</h3>
+
+    <input id="memberName" placeholder="Username">
+    <button onclick="addMember()">Adicionar</button>
+
     <div id="members"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="card hidden" id="settings">
+
+    <h3>⚙️ Definições</h3>
+
+    <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
+
+    <button onclick="closeSettings()">🔙 Voltar</button>
+
   </div>
 
 </div>
@@ -150,11 +145,7 @@ input {
 <script>
 
 let members = JSON.parse(localStorage.getItem("members") || "[]");
-
-/* THEME */
-function toggleTheme() {
-  document.body.classList.toggle("light");
-}
+let dark = true;
 
 /* ADD MEMBER */
 function addMember() {
@@ -183,6 +174,24 @@ function render() {
 }
 
 render();
+
+/* SETTINGS NAV */
+function openSettings() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("settings").classList.remove("hidden");
+}
+
+function closeSettings() {
+  document.getElementById("settings").classList.add("hidden");
+  document.getElementById("home").style.display = "block";
+}
+
+/* THEME */
+function toggleTheme() {
+  dark = !dark;
+
+  document.body.classList.toggle("light");
+}
 
 </script>
 
