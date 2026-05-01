@@ -58,17 +58,30 @@
     .green { background: #22c55e; color: white; }
     .blue { background: #3b82f6; color: white; }
 
+    /* INPUTS CORRIGIDOS */
     input {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       margin-top: 8px;
-      border-radius: 6px;
-      border: none;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #111827;
+      color: white;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    input:focus {
+      border: 1px solid #3b82f6;
     }
 
     .review {
       background: #222;
-      padding: 8px;
+      padding: 10px;
       margin-top: 10px;
       border-radius: 8px;
       text-align: left;
@@ -101,10 +114,9 @@
 
 <div class="container">
 
-  <!-- FPS MODE -->
+  <!-- MODOS -->
   <div class="card">
     <h3>⚡ Modes</h3>
-
     <button class="green" onclick="copyPotato()">🥔 Potato Mode</button>
     <button class="blue" onclick="copyBalanced()">⚖️ Balanced Mode</button>
   </div>
@@ -112,15 +124,15 @@
   <!-- INFO -->
   <div class="card">
     <h3>🧠 What it does</h3>
-    <p>Reduces graphics load and improves FPS stability in Roblox games.</p>
+    <p>Reduces graphics load and improves FPS stability.</p>
   </div>
 
-  <!-- REVIEWS -->
+  <!-- OPINIÕES -->
   <div class="card">
     <h3>💬 Community Opinions</h3>
 
     <input id="name" placeholder="Your name">
-    <input id="opinion" placeholder="Your opinion...">
+    <input id="opinion" placeholder="Write your opinion...">
 
     <button class="green" onclick="addOpinion()">Submit</button>
 
@@ -181,4 +193,5 @@ function addOpinion() {
 </script>
 
 </body>
+</html>
 </html>
