@@ -1,223 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Community Hub</title>
+<title>Links</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Arial;
-}
+  :root {
+    --bg: #0f0f0f;
+    --card: #1c1c1c;
+    --text: #ffffff;
+    --accent: #4f7cff;
+  }
 
-body {
-  margin: 0;
-  background: #0b0f17;
-  color: white;
-}
+  body.light {
+    --bg: #f2f2f2;
+    --card: #ffffff;
+    --text: #111;
+  }
 
-/* LOGIN */
-#login {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-.loginBox {
-  background: #1f2937;
-  padding: 20px;
-  border-radius: 14px;
-  width: 300px;
-}
+  .container {
+    text-align: center;
+  }
 
-/* APP */
-#app {
-  display: none;
-  max-width: 800px;
-  margin: auto;
-  padding: 15px;
-}
+  .btn {
+    display: block;
+    margin: 10px;
+    padding: 15px 25px;
+    background: var(--card);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.2s;
+    border: 1px solid transparent;
+  }
 
-.card {
-  background: #1f2937;
-  padding: 15px;
-  border-radius: 14px;
-  margin-bottom: 15px;
-}
+  .btn:hover {
+    border-color: var(--accent);
+    transform: scale(1.03);
+  }
 
-/* INPUT + SELECT */
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: none;
-  background: #111827;
-  color: white;
-}
+  .settings {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: var(--card);
+    padding: 10px;
+    border-radius: 10px;
+  }
 
-/* BUTTON */
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #3b82f6;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+  select, button {
+    margin-top: 5px;
+    padding: 5px;
+  }
 
-/* MEMBER */
-.member {
-  background: #111827;
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 8px;
-}
+  .panel {
+    margin-top: 10px;
+    display: none;
+  }
+
+  .toggle {
+    cursor: pointer;
+  }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN -->
-<div id="login">
-  <div class="loginBox">
-    <h3>👤 Criar Perfil</h3>
-
-    <input id="nameInput" placeholder="Nome">
-
-    <select id="statusInput">
-      <option value="online">🟢 Online</option>
-      <option value="dnd">🌙 Não incomodar</option>
-      <option value="offline">⚫ Offline</option>
-    </select>
-
-    <button onclick="createProfile()">Entrar</button>
-  </div>
+<div class="container">
+  <a class="btn" href="https://discord.com" target="_blank">Discord</a>
+  <a class="btn" href="https://github.com" target="_blank">GitHub</a>
 </div>
 
-<!-- 🌐 APP -->
-<div id="app">
+<div class="settings">
+  <div class="toggle" onclick="togglePanel()">⚙️ Settings</div>
 
-  <!-- PROFILE -->
-  <div class="card">
-    <h3>👤 Perfil</h3>
+  <div class="panel" id="panel">
+    <button onclick="toggleTheme()">Dark / Light</button>
 
-    <p id="profileName">Nome</p>
-    <p id="profileStatus">Estado</p>
+    <br><br>
+
+    <label>Accent color:</label>
+    <select onchange="changeColor(this.value)">
+      <option value="#4f7cff">Blue</option>
+      <option value="#ff4f4f">Red</option>
+      <option value="#4fff7c">Green</option>
+      <option value="#b84fff">Purple</option>
+    </select>
   </div>
-
-  <!-- LINKS -->
-  <div class="card">
-    <h3>🔗 Links</h3>
-
-    <button onclick="window.open('https://discord.com','_blank')">
-      Discord
-    </button>
-
-    <button onclick="window.open('https://youtube.com','_blank')">
-      YouTube
-    </button>
-  </div>
-
-  <!-- MEMBERS -->
-  <div class="card">
-    <h3>👥 Membros</h3>
-
-    <input id="memberName" placeholder="Username">
-    <button onclick="addMember()">Adicionar</button>
-
-    <div id="members"></div>
-  </div>
-
 </div>
 
 <script>
-
-let members = JSON.parse(localStorage.getItem("members") || "[]");
-
-/* INIT */
-function init() {
-  let name = localStorage.getItem("username");
-  let status = localStorage.getItem("status");
-
-  if (name) {
-    showApp();
-    loadProfile(name, status);
-  } else {
-    showLogin();
+  // load settings
+  if (localStorage.getItem("theme") === "light") {
+    document.body.classList.add("light");
   }
 
-  render();
-}
+  if (localStorage.getItem("color")) {
+    document.documentElement.style.setProperty("--accent", localStorage.getItem("color"));
+  }
 
-/* CREATE PROFILE */
-function createProfile() {
-  let name = document.getElementById("nameInput").value;
-  let status = document.getElementById("statusInput").value;
+  function toggleTheme() {
+    document.body.classList.toggle("light");
 
-  if (!name) return;
+    if (document.body.classList.contains("light")) {
+      localStorage.setItem("theme", "light");
+    } else {
+      localStorage.setItem("theme", "dark");
+    }
+  }
 
-  localStorage.setItem("username", name);
-  localStorage.setItem("status", status);
+  function changeColor(color) {
+    document.documentElement.style.setProperty("--accent", color);
+    localStorage.setItem("color", color);
+  }
 
-  loadProfile(name, status);
-  showApp();
-}
-
-/* SHOW/HIDE */
-function showApp() {
-  document.getElementById("login").style.display = "none";
-  document.getElementById("app").style.display = "block";
-}
-
-function showLogin() {
-  document.getElementById("login").style.display = "flex";
-  document.getElementById("app").style.display = "none";
-}
-
-/* PROFILE */
-function loadProfile(name, status) {
-  document.getElementById("profileName").innerText = "👤 " + name;
-
-  let text = "🟢 Online";
-
-  if (status === "dnd") text = "🌙 Não incomodar";
-  if (status === "offline") text = "⚫ Offline";
-
-  document.getElementById("profileStatus").innerText = text;
-}
-
-/* MEMBERS */
-function addMember() {
-  let name = document.getElementById("memberName").value;
-  if (!name) return;
-
-  members.push(name);
-  localStorage.setItem("members", JSON.stringify(members));
-
-  document.getElementById("memberName").value = "";
-  render();
-}
-
-function render() {
-  let box = document.getElementById("members");
-  box.innerHTML = "";
-
-  members.forEach(m => {
-    let div = document.createElement("div");
-    div.className = "member";
-    div.innerText = "@ " + m;
-    box.appendChild(div);
-  });
-}
-
-/* START */
-init();
-
+  function togglePanel() {
+    const panel = document.getElementById("panel");
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  }
 </script>
 
 </body>
