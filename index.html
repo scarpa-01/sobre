@@ -17,15 +17,13 @@ body {
   transition: 0.3s;
 }
 
-/* HEADER */
 header {
   text-align: center;
-  padding: 20px;
+  padding: 18px;
   font-size: 22px;
   font-weight: bold;
 }
 
-/* CONTAINER */
 .container {
   max-width: 800px;
   margin: auto;
@@ -38,7 +36,6 @@ header {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 15px;
-  transition: 0.3s;
 }
 
 /* BUTTON */
@@ -52,6 +49,10 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
 }
 
 /* INPUT */
@@ -73,13 +74,9 @@ input {
   margin-top: 8px;
 }
 
-/* SETTINGS */
-.settings {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  background: #111827;
-}
+/* LINKS BUTTONS */
+.discord { background: #5865F2; }
+.youtube { background: #ef4444; }
 
 /* LIGHT MODE */
 .light {
@@ -109,18 +106,30 @@ input {
 
 <div class="container">
 
+  <!-- LINKS -->
+  <div class="card">
+    <h3>🔗 Liga-te</h3>
+
+    <button class="discord"
+      onclick="window.open('https://discord.com','_blank')">
+      Entrar no Discord
+    </button>
+
+    <button class="youtube"
+      onclick="window.open('https://youtube.com','_blank')">
+      Ir ao YouTube
+    </button>
+  </div>
+
   <!-- SETTINGS -->
   <div class="card">
     <h3>⚙️ Definições</h3>
 
     <button onclick="toggleTheme()">🌙 / ☀️ Modo Escuro</button>
 
-    <div class="settings">
-      <h4>ℹ️ Sobre o site</h4>
-      <p>
-        Este é um site de comunidade simples com membros e ligação a conteúdos.
-      </p>
-    </div>
+    <p style="margin-top:10px;">
+      ℹ️ Este site é um hub simples para comunidade, links e membros.
+    </p>
   </div>
 
   <!-- ADD MEMBER -->
@@ -142,4 +151,40 @@ input {
 
 let members = JSON.parse(localStorage.getItem("members") || "[]");
 
-/* TO
+/* THEME */
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
+
+/* ADD MEMBER */
+function addMember() {
+  let name = document.getElementById("memberName").value;
+  if (!name) return;
+
+  members.push({ name });
+  localStorage.setItem("members", JSON.stringify(members));
+
+  document.getElementById("memberName").value = "";
+
+  render();
+}
+
+/* RENDER */
+function render() {
+  let box = document.getElementById("members");
+  box.innerHTML = "";
+
+  members.forEach(m => {
+    let div = document.createElement("div");
+    div.className = "member";
+    div.innerText = "@ " + m.name;
+    box.appendChild(div);
+  });
+}
+
+render();
+
+</script>
+
+</body>
+</html>
