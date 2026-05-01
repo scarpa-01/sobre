@@ -2,202 +2,232 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Friend Hub</title>
+<title>Mini Chat Hub</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial;
-  background: linear-gradient(135deg, #0b0f17, #111827);
+  background: #0b0f17;
   color: white;
+  display: flex;
+  height: 100vh;
 }
 
-/* HEADER */
-header {
-  padding: 18px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
   background: #111827;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  padding: 10px;
+  overflow-y: auto;
 }
 
-/* CONTAINER */
-.container {
-  max-width: 700px;
-  margin: auto;
-  padding: 15px;
-}
-
-/* CARDS */
-.card {
-  background: #1f2937;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-/* INPUTS */
-input, textarea {
-  width: 100%;
+.channel {
   padding: 10px;
   margin-top: 8px;
-  border-radius: 8px;
-  border: none;
-  background: #0f172a;
-  color: white;
-  outline: none;
-}
-
-/* BUTTONS */
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
+  background: #1f2937;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.channel:hover {
+  background: #3b82f6;
+}
+
+/* CHAT */
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 15px;
+  background: #111827;
   font-weight: bold;
-  transition: 0.2s;
 }
 
-button:hover {
-  transform: scale(1.02);
+.messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
 }
 
-.blue { background: #3b82f6; color: white; }
-.green { background: #22c55e; color: white; }
-.red { background: #ef4444; color: white; }
+.msg {
+  background: #1f2937;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 8px;
+}
 
-/* POSTS */
-.post {
+/* INPUT */
+.inputBox {
+  display: flex;
+  padding: 10px;
+  background: #111827;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
   background: #0f172a;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border-left: 3px solid #3b82f6;
+  color: white;
 }
 
-/* PROFILE */
-.profile {
-  text-align: center;
+button {
+  margin-left: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
 }
 
-.avatar {
-  font-size: 45px;
+/* LOGIN */
+.login {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #0b0f17;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.small {
-  font-size: 12px;
-  opacity: 0.7;
+.login input {
+  width: 200px;
+  margin: 5px;
 }
-
 </style>
 </head>
 
 <body>
 
-<header>💬 Friend Hub</header>
+<!-- LOGIN -->
+<div class="login" id="login">
+  <h2>Mini Chat Hub</h2>
+  <input id="name" placeholder="Nome">
+  <input id="emoji" placeholder="Emoji 😎🔥💀">
+  <button onclick="enter()">Entrar</button>
+</div>
 
-<div class="container">
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-  <!-- LOGIN -->
-  <div class="card" id="loginBox">
-    <h3>Criar conta</h3>
+  <h3>Salas</h3>
+  <div class="channel" onclick="switchRoom('geral')">💬 Geral</div>
+  <div class="channel" onclick="switchRoom('random')">🎲 Random</div>
 
-    <input id="username" placeholder="Nome de utilizador">
-    <input id="avatar" placeholder="Emoji (ex: 😎🔥💀)">
+  <hr style="border:1px solid #333;">
 
-    <button class="blue" onclick="createAccount()">Entrar</button>
+  <h4>Amigos</h4>
+
+  <input id="friendName" placeholder="Adicionar amigo">
+  <button onclick="addFriend()">Adicionar</button>
+
+  <div id="friendsList"></div>
+
+</div>
+
+<!-- CHAT -->
+<div class="chat">
+
+  <div class="header" id="roomName">💬 Geral</div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="inputBox">
+    <input id="msg" placeholder="Escreve mensagem...">
+    <button onclick="send()">Enviar</button>
   </div>
-
-  <!-- PROFILE -->
-  <div class="card" id="profileBox" style="display:none;">
-    <div class="profile">
-      <div class="avatar" id="avatarShow">👤</div>
-      <h3 id="nameShow"></h3>
-      <p class="small">Online agora</p>
-    </div>
-
-    <textarea id="postText" placeholder="O que estás a pensar?"></textarea>
-    <button class="green" onclick="addPost()">Publicar</button>
-  </div>
-
-  <!-- FEED -->
-  <div id="feed"></div>
 
 </div>
 
 <script>
 
-let user = JSON.parse(localStorage.getItem("user"));
+let user = {};
+let room = "geral";
 
-function createAccount() {
-  let name = document.getElementById("username").value;
-  let avatar = document.getElementById("avatar").value;
+let data = JSON.parse(localStorage.getItem("chat") || "{}");
+let friends = JSON.parse(localStorage.getItem("friends") || "[]");
+
+/* ENTRAR */
+function enter() {
+  let name = document.getElementById("name").value;
+  let emoji = document.getElementById("emoji").value;
 
   if (!name) return;
 
-  user = { name, avatar: avatar || "👤" };
-  localStorage.setItem("user", JSON.stringify(user));
+  user = { name, emoji: emoji || "👤" };
 
-  loadUser();
+  document.getElementById("login").style.display = "none";
+
+  if (!data[room]) data[room] = [];
+
+  render();
+  renderFriends();
 }
 
-function loadUser() {
-  if (!user) return;
+/* TROCAR SALA */
+function switchRoom(r) {
+  room = r;
+  document.getElementById("roomName").innerText = "💬 " + r;
 
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("profileBox").style.display = "block";
+  if (!data[room]) data[room] = [];
 
-  document.getElementById("nameShow").innerText = user.name;
-  document.getElementById("avatarShow").innerText = user.avatar;
-
-  loadPosts();
+  render();
 }
 
-function addPost() {
-  let text = document.getElementById("postText").value;
+/* ENVIAR MENSAGEM */
+function send() {
+  let text = document.getElementById("msg").value;
   if (!text) return;
 
-  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+  if (!data[room]) data[room] = [];
 
-  posts.unshift({
+  data[room].push({
     user: user.name,
-    avatar: user.avatar,
+    emoji: user.emoji,
     text: text
   });
 
-  localStorage.setItem("posts", JSON.stringify(posts));
+  localStorage.setItem("chat", JSON.stringify(data));
 
-  document.getElementById("postText").value = "";
-  loadPosts();
+  document.getElementById("msg").value = "";
+
+  render();
 }
 
-function loadPosts() {
-  let feed = document.getElementById("feed");
-  feed.innerHTML = "";
+/* MOSTRAR CHAT */
+function render() {
+  let box = document.getElementById("messages");
+  box.innerHTML = "";
 
-  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+  let msgs = data[room] || [];
 
-  posts.forEach(p => {
+  msgs.forEach(m => {
     let div = document.createElement("div");
-    div.className = "post";
-
-    div.innerHTML = `
-      <b>${p.avatar} ${p.user}</b><br><br>
-      ${p.text}
-    `;
-
-    feed.appendChild(div);
+    div.className = "msg";
+    div.innerHTML = `<b>${m.emoji} ${m.user}</b><br>${m.text}`;
+    box.appendChild(div);
   });
 }
 
-loadUser();
+/* AMIGOS */
+function addFriend() {
+  let name = document.getElementById("friendName").value;
+  if (!name) return;
 
-</script>
+  if (!friends.includes(name)) {
+    friends.push(name);
+  }
 
-</body>
-</html>
+  localStorage.setItem("friends", JSON.stringify(friends));
+
+  document.getElementById("friendName").value = "";
+
+  render
