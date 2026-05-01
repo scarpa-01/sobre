@@ -86,6 +86,17 @@
       text-align: left;
     }
 
+    .smallbtn {
+      width: auto;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -100,14 +111,6 @@
 
     .show {
       opacity: 1;
-    }
-
-    .smallbtn {
-      width: auto;
-      padding: 5px 10px;
-      margin-right: 5px;
-      margin-top: 5px;
-      border-radius: 6px;
     }
   </style>
 </head>
@@ -131,7 +134,7 @@
   <!-- INFO -->
   <div class="card">
     <h3>🧠 What it does</h3>
-    <p>Reduces graphics load and improves FPS stability.</p>
+    <p>Reduces graphics load and improves FPS stability for smoother gameplay.</p>
   </div>
 
   <!-- OPINIÕES -->
@@ -182,10 +185,10 @@ function copyBalanced() {
   showToast("⚖️ Balanced copied!");
 }
 
-/* OPINIÕES */
+/* 💬 OPINIÕES */
 function addOpinion() {
-  const name = document.getElementById("name").value;
-  const text = document.getElementById("opinion").value;
+  const name = document.getElementById("name").value.trim();
+  const text = document.getElementById("opinion").value.trim();
 
   if (!name || !text) return;
 
@@ -194,7 +197,7 @@ function addOpinion() {
 
   div.innerHTML = `
     <b>${name}:</b><br>
-    <span class="text">${text}</span><br>
+    <span class="opinion-text">${text}</span><br>
 
     <button class="smallbtn blue" onclick="editOpinion(this)">Edit</button>
     <button class="smallbtn" style="background:#ef4444;color:white;" onclick="deleteOpinion(this)">Delete</button>
@@ -207,21 +210,20 @@ function addOpinion() {
 }
 
 function deleteOpinion(btn) {
-  btn.parentElement.remove();
+  btn.closest(".review").remove();
 }
 
 function editOpinion(btn) {
-  const parent = btn.parentElement;
-  const textSpan = parent.querySelector(".text");
+  const review = btn.closest(".review");
+  const textEl = review.querySelector(".opinion-text");
 
-  const newText = prompt("Edit your opinion:", textSpan.innerText);
+  const newText = prompt("Edit your opinion:", textEl.innerText);
 
-  if (newText) {
-    textSpan.innerText = newText;
+  if (newText !== null && newText.trim() !== "") {
+    textEl.innerText = newText;
   }
 }
 </script>
 
 </body>
-</html>
 </html>
