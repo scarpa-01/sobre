@@ -3,129 +3,199 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mini Social Server</title>
+<title>Friend Hub</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial;
-  background: #0b0f17;
+  background: linear-gradient(135deg, #0b0f17, #111827);
   color: white;
 }
 
+/* HEADER */
 header {
-  background: #111827;
-  padding: 15px;
+  padding: 18px;
   text-align: center;
+  font-size: 20px;
   font-weight: bold;
+  background: #111827;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
+/* CONTAINER */
 .container {
   max-width: 700px;
   margin: auto;
   padding: 15px;
 }
 
+/* CARDS */
 .card {
   background: #1f2937;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
+/* INPUTS */
 input, textarea {
   width: 100%;
   padding: 10px;
   margin-top: 8px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: none;
-  background: #111827;
+  background: #0f172a;
   color: white;
+  outline: none;
 }
 
+/* BUTTONS */
 button {
-  margin-top: 10px;
+  width: 100%;
   padding: 10px;
+  margin-top: 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  transition: 0.2s;
 }
 
-.post {
-  background: #111827;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-}
-
-.smallbtn {
-  padding: 5px 8px;
-  margin-right: 5px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
+button:hover {
+  transform: scale(1.02);
 }
 
 .blue { background: #3b82f6; color: white; }
+.green { background: #22c55e; color: white; }
 .red { background: #ef4444; color: white; }
+
+/* POSTS */
+.post {
+  background: #0f172a;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border-left: 3px solid #3b82f6;
+}
+
+/* PROFILE */
+.profile {
+  text-align: center;
+}
+
+.avatar {
+  font-size: 45px;
+}
+
+.small {
+  font-size: 12px;
+  opacity: 0.7;
+}
 
 </style>
 </head>
 
 <body>
 
-<header>💬 Mini Social Server</header>
+<header>💬 Friend Hub</header>
 
 <div class="container">
 
-  <div class="card">
-    <h3>Criar Post</h3>
+  <!-- LOGIN -->
+  <div class="card" id="loginBox">
+    <h3>Criar conta</h3>
 
-    <input id="name" placeholder="Teu nome">
-    <textarea id="msg" placeholder="Escreve algo..."></textarea>
+    <input id="username" placeholder="Nome de utilizador">
+    <input id="avatar" placeholder="Emoji (ex: 😎🔥💀)">
 
-    <button class="blue" onclick="addPost()">Postar</button>
+    <button class="blue" onclick="createAccount()">Entrar</button>
   </div>
 
+  <!-- PROFILE -->
+  <div class="card" id="profileBox" style="display:none;">
+    <div class="profile">
+      <div class="avatar" id="avatarShow">👤</div>
+      <h3 id="nameShow"></h3>
+      <p class="small">Online agora</p>
+    </div>
+
+    <textarea id="postText" placeholder="O que estás a pensar?"></textarea>
+    <button class="green" onclick="addPost()">Publicar</button>
+  </div>
+
+  <!-- FEED -->
   <div id="feed"></div>
 
 </div>
 
 <script>
 
+let user = JSON.parse(localStorage.getItem("user"));
+
+function createAccount() {
+  let name = document.getElementById("username").value;
+  let avatar = document.getElementById("avatar").value;
+
+  if (!name) return;
+
+  user = { name, avatar: avatar || "👤" };
+  localStorage.setItem("user", JSON.stringify(user));
+
+  loadUser();
+}
+
+function loadUser() {
+  if (!user) return;
+
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("profileBox").style.display = "block";
+
+  document.getElementById("nameShow").innerText = user.name;
+  document.getElementById("avatarShow").innerText = user.avatar;
+
+  loadPosts();
+}
+
 function addPost() {
-  let name = document.getElementById("name").value;
-  let msg = document.getElementById("msg").value;
+  let text = document.getElementById("postText").value;
+  if (!text) return;
 
-  if (!name || !msg) return;
+  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-  let div = document.createElement("div");
-  div.className = "post";
+  posts.unshift({
+    user: user.name,
+    avatar: user.avatar,
+    text: text
+  });
 
-  div.innerHTML = `
-    <b>${name}</b><br><br>
-    <span>${msg}</span><br><br>
+  localStorage.setItem("posts", JSON.stringify(posts));
 
-    <button class="smallbtn blue" onclick="edit(this)">Edit</button>
-    <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
-  `;
-
-  document.getElementById("feed").prepend(div);
-
-  document.getElementById("msg").value = "";
+  document.getElementById("postText").value = "";
+  loadPosts();
 }
 
-function edit(btn) {
-  let post = btn.parentElement;
-  let text = post.querySelector("span").innerText;
+function loadPosts() {
+  let feed = document.getElementById("feed");
+  feed.innerHTML = "";
 
-  let newText = prompt("Edit post:", text);
+  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-  if (newText) {
-    post.querySelector("span").innerText = newText;
-  }
+  posts.forEach(p => {
+    let div = document.createElement("div");
+    div.className = "post";
+
+    div.innerHTML = `
+      <b>${p.avatar} ${p.user}</b><br><br>
+      ${p.text}
+    `;
+
+    feed.appendChild(div);
+  });
 }
+
+loadUser();
 
 </script>
 
