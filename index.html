@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Links</title>
 
 <style>
@@ -10,15 +10,15 @@
   --bg1:#0b0f17;
   --bg2:#111a2e;
   --card:rgba(255,255,255,0.06);
-  --text:#ffffff;
+  --text:#fff;
   --accent:#4f7cff;
 }
 
 body.light{
-  --bg1:#f4f6fb;
-  --bg2:#e7ebf5;
+  --bg1:#f5f6fa;
+  --bg2:#e9ecf5;
   --card:rgba(255,255,255,0.85);
-  --text:#111111;
+  --text:#111;
 }
 
 *{
@@ -27,86 +27,68 @@ body.light{
 
 body{
   margin:0;
-  font-family:system-ui, Arial, sans-serif;
+  font-family:system-ui;
   color:var(--text);
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
   overflow:hidden;
-
-  background:linear-gradient(
-    135deg,
-    var(--bg1),
-    var(--bg2)
-  );
-
-  transition:0.35s ease;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
 }
 
-/* animated glow */
+/* 🌌 PARTICLES */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+}
+
+/* 💫 glow blob */
 body::before{
   content:"";
   position:absolute;
-  width:550px;
-  height:550px;
+  width:600px;
+  height:600px;
   background:var(--accent);
   border-radius:50%;
-  filter:blur(180px);
-  opacity:0.25;
-  top:-180px;
-  left:-180px;
-  animation:float 10s ease-in-out infinite;
+  filter:blur(200px);
+  opacity:.18;
+  top:-200px;
+  left:-200px;
+  animation:move 12s ease-in-out infinite;
 }
 
-@keyframes float{
-  0%{
-    transform:translate(0,0);
-  }
-  50%{
-    transform:translate(40px,20px);
-  }
-  100%{
-    transform:translate(0,0);
-  }
+@keyframes move{
+  0%,100%{transform:translate(0,0);}
+  50%{transform:translate(60px,40px);}
 }
 
+/* MAIN */
 .container{
   position:relative;
-  z-index:1;
+  z-index:2;
   text-align:center;
   animation:fade .6s ease;
 }
 
 @keyframes fade{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
 .title{
-  font-size:30px;
+  font-size:32px;
   font-weight:700;
-  margin-bottom:10px;
 }
 
 .status{
-  margin-bottom:22px;
+  margin:10px 0 22px;
+  opacity:.7;
   font-size:14px;
-  opacity:0.75;
 }
 
-.members{
-  margin-top:18px;
-  font-size:14px;
-  opacity:0.75;
-}
-
+/* LINKS */
 .links{
   display:flex;
   flex-direction:column;
@@ -115,36 +97,30 @@ body::before{
 
 .card{
   width:290px;
-  padding:17px;
-  border:none;
-  border-radius:18px;
+  padding:16px;
+  border-radius:16px;
 
   background:var(--card);
-  color:var(--text);
-
-  text-decoration:none;
-  font-size:15px;
-  font-weight:500;
-
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(16px);
 
   border:1px solid rgba(255,255,255,0.08);
 
-  transition:
-    transform .22s ease,
-    border-color .22s ease,
-    box-shadow .22s ease;
+  color:var(--text);
+  text-decoration:none;
 
   cursor:pointer;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
 }
 
+/* ✨ premium hover */
 .card:hover{
-  transform:translateY(-4px) scale(1.02);
+  transform:translateY(-6px);
   border-color:var(--accent);
-
-  box-shadow:
-    0 10px 35px rgba(0,0,0,0.25),
-    0 0 20px color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
 }
 
 /* SETTINGS */
@@ -152,153 +128,81 @@ body::before{
   position:fixed;
   top:16px;
   right:16px;
-  z-index:5;
+  z-index:3;
 }
 
 .gear{
   width:44px;
   height:44px;
-
   display:flex;
-  align-items:center;
   justify-content:center;
-
-  border-radius:14px;
-  cursor:pointer;
-
+  align-items:center;
+  border-radius:12px;
   background:var(--card);
-  backdrop-filter:blur(10px);
-
-  border:1px solid rgba(255,255,255,0.08);
-
+  backdrop-filter:blur(12px);
+  cursor:pointer;
   transition:.2s ease;
 }
 
 .gear:hover{
-  border-color:var(--accent);
-  transform:rotate(20deg);
+  transform:rotate(25deg);
+  border:1px solid var(--accent);
 }
 
+/* smoother panel */
 .panel{
   margin-top:10px;
-  width:180px;
-
   display:none;
-
   background:var(--card);
-  backdrop-filter:blur(14px);
-
   padding:12px;
-  border-radius:16px;
-
-  border:1px solid rgba(255,255,255,0.08);
-
-  animation:panelFade .2s ease;
+  border-radius:14px;
+  backdrop-filter:blur(16px);
+  animation:panel .2s ease;
 }
 
-@keyframes panelFade{
-  from{
-    opacity:0;
-    transform:translateY(-6px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+@keyframes panel{
+  from{opacity:0; transform:translateY(-8px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
-.panel button,
-.panel select{
+.panel button{
   width:100%;
   margin-top:8px;
-  padding:9px;
-
+  padding:8px;
   border:none;
   border-radius:10px;
-
-  background:rgba(255,255,255,0.08);
-  color:var(--text);
-
   cursor:pointer;
 }
 
-#toast{
-  position:fixed;
-  bottom:24px;
-  left:50%;
-  transform:translateX(-50%);
-
-  background:var(--card);
-  color:var(--text);
-
-  padding:12px 18px;
-  border-radius:14px;
-
-  border:1px solid rgba(255,255,255,0.08);
-
-  backdrop-filter:blur(14px);
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:.3s ease;
-}
-
-#toast.show{
-  opacity:1;
-}
-
+/* 📱 mobile */
 @media (max-width:600px){
-
   .card{
     width:90vw;
   }
-
 }
+
 </style>
 </head>
 
 <body>
 
+<canvas id="particles"></canvas>
+
 <div class="container">
 
-  <div class="title">
-    Links rápidos
-  </div>
-
-  <div class="status">
-    🟢 online • <span id="time"></span>
-  </div>
+  <div class="title">Links rápidos</div>
+  <div class="status">🟢 online</div>
 
   <div class="links">
 
-    <a
-      class="card"
-      href="https://discord.gg/TEU-LINK"
-      target="_blank"
-    >
+    <a class="card" href="https://discord.gg/TEU-LINK" target="_blank">
       💬 Discord
     </a>
 
-    <button
-      class="card"
-      onclick="copyDiscord()"
-    >
-      📋 Copiar link Discord
-    </button>
-
-    <a
-      class="card"
-      href="https://github.com/scarpa-01"
-      target="_blank"
-    >
+    <a class="card" href="https://github.com/scarpa-01" target="_blank">
       🐙 GitHub
     </a>
 
-  </div>
-
-  <div class="members">
-    👥 <span id="memberCount">...</span> membros
   </div>
 
 </div>
@@ -306,165 +210,76 @@ body::before{
 <!-- SETTINGS -->
 <div class="settings">
 
-  <div
-    class="gear"
-    onclick="togglePanel()"
-  >
-    ⚙️
+  <div class="gear" onclick="togglePanel()">⚙️</div>
+
+  <div class="panel" id="panel">
+    <button onclick="toggleTheme()">Tema claro/escuro</button>
   </div>
 
-  <div
-    class="panel"
-    id="panel"
-  >
-
-    <button onclick="toggleTheme()">
-      Tema claro/escuro
-    </button>
-
-    <select onchange="changeColor(this.value)">
-      <option value="#4f7cff">Azul</option>
-      <option value="#ff4f4f">Vermelho</option>
-      <option value="#4fff7c">Verde</option>
-      <option value="#b84fff">Roxo</option>
-      <option value="#ff9f1c">Laranja</option>
-    </select>
-
-  </div>
-
-</div>
-
-<div id="toast">
-  ✅ Copiado!
 </div>
 
 <script>
-const root = document.documentElement;
-const panel = document.getElementById("panel");
-
-/* LOAD THEME */
-if(localStorage.getItem("theme") === "light"){
-  document.body.classList.add("light");
-}
-
-/* LOAD COLOR */
-const savedColor = localStorage.getItem("color");
-
-if(savedColor){
-  root.style.setProperty("--accent", savedColor);
-}
 
 /* THEME */
 function toggleTheme(){
-
   document.body.classList.toggle("light");
-
-  localStorage.setItem(
-    "theme",
-    document.body.classList.contains("light")
-      ? "light"
-      : "dark"
-  );
-
 }
 
-/* COLOR */
-function changeColor(color){
-
-  root.style.setProperty("--accent", color);
-
-  localStorage.setItem(
-    "color",
-    color
-  );
-
-}
-
-/* SETTINGS PANEL */
+/* PANEL */
 function togglePanel(){
+  const p = document.getElementById("panel");
+  p.style.display = p.style.display === "block" ? "none" : "block";
+}
 
-  if(panel.style.display === "block"){
-    panel.style.display = "none";
-  } else {
-    panel.style.display = "block";
+/* 🌌 CLEAN PARTICLES */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resize);
+resize();
+
+for(let i=0;i<45;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*1.8,
+    dx:(Math.random()-0.5)*0.25,
+    dy:(Math.random()-0.5)*0.25
+  });
+}
+
+function animate(){
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  for(let p of particles){
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if(p.x<0) p.x=canvas.width;
+    if(p.x>canvas.width) p.x=0;
+    if(p.y<0) p.y=canvas.height;
+    if(p.y>canvas.height) p.y=0;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="rgba(255,255,255,0.25)";
+    ctx.fill();
   }
 
+  requestAnimationFrame(animate);
 }
 
-/* CLOSE SETTINGS IF CLICK OUTSIDE */
-document.addEventListener("click", (e)=>{
+animate();
 
-  if(!e.target.closest(".settings")){
-    panel.style.display = "none";
-  }
-
-});
-
-/* COPY DISCORD */
-function copyDiscord(){
-
-  const discordLink =
-    "https://discord.gg/TEU-LINK";
-
-  navigator.clipboard.writeText(discordLink);
-
-  const toast =
-    document.getElementById("toast");
-
-  toast.classList.add("show");
-
-  setTimeout(()=>{
-
-    toast.classList.remove("show");
-
-  }, 2000);
-
-}
-
-/* LIVE TIME */
-function updateTime(){
-
-  const now = new Date();
-
-  const time =
-    now.toLocaleTimeString("pt-PT", {
-      hour:"2-digit",
-      minute:"2-digit"
-    });
-
-  document.getElementById("time").textContent =
-    `updated ${time}`;
-
-}
-
-updateTime();
-
-setInterval(updateTime, 1000);
-
-/* DISCORD MEMBER COUNT */
-async function loadDiscordMembers(){
-
-  try{
-
-    const response = await fetch(
-      "https://discord.com/api/guilds/TEU_SERVER_ID/widget.json"
-    );
-
-    const data = await response.json();
-
-    document.getElementById("memberCount").textContent =
-      data.presence_count;
-
-  } catch(err){
-
-    document.getElementById("memberCount").textContent =
-      "?";
-
-  }
-
-}
-
-loadDiscordMembers();
 </script>
 
 </body>
