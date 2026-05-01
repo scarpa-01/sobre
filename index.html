@@ -2,298 +2,143 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini Chat Hub</title>
+<title>Community Hub</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
   font-family: Arial;
   background: #0b0f17;
   color: white;
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
 }
 
-/* SIDEBAR */
-.sidebar {
-  width: 220px;
+/* HEADER */
+header {
+  padding: 20px;
+  text-align: center;
   background: #111827;
-  padding: 10px;
-  overflow-y: auto;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.channel {
-  padding: 10px;
-  margin-top: 8px;
+/* CONTAINER */
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 15px;
+}
+
+/* CARD */
+.card {
   background: #1f2937;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-}
-
-.channel:hover {
-  background: #3b82f6;
-}
-
-/* CHAT */
-.chat {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.header {
-  padding: 12px;
-  background: #111827;
   font-weight: bold;
-  font-size: 14px;
 }
 
-.messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.msg {
-  background: #1f2937;
-  padding: 8px;
-  margin-top: 8px;
-  border-radius: 8px;
-  font-size: 14px;
-  word-break: break-word;
-}
+.discord { background: #5865F2; color: white; }
+.youtube { background: #ef4444; color: white; }
+.join { background: #22c55e; color: white; }
 
 /* INPUT */
-.inputBox {
-  display: flex;
-  padding: 10px;
-  background: #111827;
-}
-
 input {
-  flex: 1;
+  width: 100%;
   padding: 10px;
-  border: none;
+  margin-top: 8px;
   border-radius: 6px;
+  border: none;
   background: #0f172a;
   color: white;
-  font-size: 14px;
-  outline: none;
 }
 
-button {
-  margin-left: 10px;
-  padding: 10px;
-  border: none;
+.list {
+  margin-top: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.item {
+  background: #0f172a;
+  padding: 8px;
+  margin-top: 5px;
   border-radius: 6px;
-  background: #3b82f6;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
 }
 
-/* LOGIN */
-.login {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #0b0f17;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.login input {
-  width: 220px;
-  margin: 5px;
-}
-
-/* MOBILE */
-@media (max-width: 700px) {
-  body {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: 140px;
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .channel {
-    min-width: 120px;
-    text-align: center;
-  }
-
-  .chat {
-    height: calc(100vh - 140px);
-  }
-}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="login" id="login">
-  <h2>Mini Chat Hub</h2>
-  <input id="name" placeholder="Nome">
-  <input id="emoji" placeholder="Emoji 😎🔥💀">
-  <button onclick="enter()">Entrar</button>
-</div>
+<header>🌐 Community Hub</header>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+<div class="container">
 
-  <h3>Salas</h3>
-  <div class="channel" onclick="switchRoom('geral')">💬 Geral</div>
-  <div class="channel" onclick="switchRoom('random')">🎲 Random</div>
+  <!-- LINKS -->
+  <div class="card">
+    <h3>🔗 Liga-te à comunidade</h3>
 
-  <hr style="border:1px solid #333;">
+    <button class="discord" onclick="window.open('https://discord.com','_blank')">
+      Entrar no Discord
+    </button>
 
-  <h4>Amigos</h4>
+    <button class="youtube" onclick="window.open('https://youtube.com','_blank')">
+      Ir ao YouTube
+    </button>
+  </div>
 
-  <input id="friendName" placeholder="Adicionar amigo">
-  <button onclick="addFriend()">+</button>
+  <!-- INSCRIÇÃO -->
+  <div class="card">
+    <h3>📩 Inscreve-te na comunidade</h3>
 
-  <div id="friendsList"></div>
+    <input id="name" placeholder="O teu nome">
+    <button class="join" onclick="join()">Inscrever</button>
 
-</div>
-
-<!-- CHAT -->
-<div class="chat">
-
-  <div class="header" id="roomName">💬 Geral</div>
-
-  <div class="messages" id="messages"></div>
-
-  <div class="inputBox">
-    <input id="msg" placeholder="Escreve mensagem...">
-    <button onclick="send()">Enviar</button>
+    <div class="list" id="list"></div>
   </div>
 
 </div>
 
 <script>
 
-let user = {};
-let room = "geral";
+let users = JSON.parse(localStorage.getItem("users") || "[]");
 
-let data = JSON.parse(localStorage.getItem("chat") || "{}");
-let friends = JSON.parse(localStorage.getItem("friends") || "[]");
-
-/* LOGIN */
-function enter() {
+function join() {
   let name = document.getElementById("name").value;
-  let emoji = document.getElementById("emoji").value;
-
   if (!name) return;
 
-  user = { name, emoji: emoji || "👤" };
+  users.push(name);
+  localStorage.setItem("users", JSON.stringify(users));
 
-  document.getElementById("login").style.display = "none";
-
-  if (!data[room]) data[room] = [];
-
-  render();
-  renderFriends();
-}
-
-/* SALAS */
-function switchRoom(r) {
-  room = r;
-  document.getElementById("roomName").innerText = "💬 " + r;
-
-  if (!data[room]) data[room] = [];
-
-  render();
-}
-
-/* CHAT */
-function send() {
-  let text = document.getElementById("msg").value;
-  if (!text) return;
-
-  if (!data[room]) data[room] = [];
-
-  data[room].push({
-    user: user.name,
-    emoji: user.emoji,
-    text: text
-  });
-
-  localStorage.setItem("chat", JSON.stringify(data));
-
-  document.getElementById("msg").value = "";
+  document.getElementById("name").value = "";
 
   render();
 }
 
 function render() {
-  let box = document.getElementById("messages");
+  let box = document.getElementById("list");
   box.innerHTML = "";
 
-  let msgs = data[room] || [];
-
-  msgs.forEach(m => {
+  users.forEach(u => {
     let div = document.createElement("div");
-    div.className = "msg";
-    div.innerHTML = `<b>${m.emoji} ${m.user}</b><br>${m.text}`;
+    div.className = "item";
+    div.innerText = "👤 " + u;
     box.appendChild(div);
   });
 }
 
-/* AMIGOS */
-function addFriend() {
-  let name = document.getElementById("friendName").value;
-  if (!name) return;
-
-  if (!friends.includes(name)) {
-    friends.push(name);
-  }
-
-  localStorage.setItem("friends", JSON.stringify(friends));
-
-  document.getElementById("friendName").value = "";
-
-  renderFriends();
-}
-
-/* LISTA AMIGOS */
-function renderFriends() {
-  let box = document.getElementById("friendsList");
-  box.innerHTML = "";
-
-  friends.forEach(f => {
-    let div = document.createElement("div");
-    div.className = "channel";
-    div.innerText = "👤 " + f;
-
-    div.onclick = () => {
-      room = "dm_" + f;
-
-      if (!data[room]) data[room] = [];
-
-      document.getElementById("roomName").innerText = "💌 DM com " + f;
-
-      render();
-    };
-
-    box.appendChild(div);
-  });
-}
+render();
 
 </script>
 
