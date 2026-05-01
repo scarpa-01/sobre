@@ -14,7 +14,7 @@ body {
   display: flex;
 }
 
-/* MOBILE FIX */
+/* MOBILE FIX TOTAL */
 @media (max-width: 768px) {
   body {
     flex-direction: column;
@@ -26,11 +26,27 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    padding: 10px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 10px;
   }
 
   .nav button {
     width: auto;
-    margin: 5px;
+    margin: 0;
+  }
+
+  .main {
+    padding: 10px;
+  }
+
+  .musicBox {
+    width: 160px;
+    bottom: 10px;
+    right: 10px;
   }
 }
 
@@ -109,8 +125,6 @@ input {
   padding: 5px 10px;
   margin-right: 5px;
   border-radius: 5px;
-  border: none;
-  cursor: pointer;
 }
 
 .fps {
@@ -125,7 +139,6 @@ input {
   background: #3b82f6;
   padding: 10px;
   border-radius: 10px;
-  width: 200px;
 }
 .hidden { display: none; }
 </style>
@@ -138,7 +151,7 @@ input {
 </audio>
 
 <div class="sidebar">
-  <div class="logo">🎮 Launcher</div>
+  <div class="logo">🎮 Server</div>
 
   <div class="nav">
     <button onclick="show('home')">Home</button>
@@ -152,7 +165,7 @@ input {
   <div id="home">
     <div class="card">
       <h2>Welcome 👋</h2>
-      <p>Launcher melhorado + mobile fix</p>
+      <p>Mobile fixed launcher server</p>
     </div>
   </div>
 
@@ -160,7 +173,7 @@ input {
     <div class="card">
       <h3>⚡ FPS Boost</h3>
 
-      <button class="green" onclick="setMode('potato')">🥔 Potato Mode</button>
+      <button class="green" onclick="setMode('potato')">🥔 Potato</button>
       <button class="blue" onclick="setMode('balanced')">⚖️ Balanced</button>
 
       <p class="fps" id="fps">FPS Boost: 0%</p>
@@ -183,7 +196,7 @@ input {
 </div>
 
 <div class="musicBox">
-  <button onclick="toggleMusic(this)">▶ Play Music</button>
+  <button onclick="toggleMusic(this)">▶ Play</button>
   <input type="range" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
 </div>
 
@@ -195,258 +208,4 @@ let playing = false;
 function toggleMusic(btn) {
   if (!playing) {
     music.play();
-    btn.innerText = "🔇 Mute";
-    playing = true;
-  } else {
-    music.pause();
-    btn.innerText = "▶ Play Music";
-    playing = false;
-  }
-}
-
-function setVolume(v) {
-  music.volume = v;
-}
-
-function setMode(mode) {
-  if (mode === "potato") {
-    document.getElementById("fps").innerText = "FPS Boost: +80%";
-  } else {
-    document.getElementById("fps").innerText = "FPS Boost: +40%";
-  }
-}
-
-function show(page) {
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("boost").classList.add("hidden");
-  document.getElementById("reviews").classList.add("hidden");
-  document.getElementById(page).classList.remove("hidden");
-}
-
-function add() {
-  let n = document.getElementById("name").value;
-  let t = document.getElementById("text").value;
-
-  if (!n || !t) return;
-
-  let div = document.createElement("div");
-  div.className = "review";
-
-  div.innerHTML = `
-    <b>${n}</b><br>${t}<br>
-    <button class="smallbtn blue" onclick="edit(this)">Edit</button>
-    <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
-  `;
-
-  document.getElementById("list").appendChild(div);
-}
-
-function edit(btn) {
-  let box = btn.parentElement;
-  let text = box.childNodes[2].textContent;
-
-  let newText = prompt("Edit:", text);
-  if (newText) {
-    box.childNodes[2].textContent = newText;
-  }
-}
-
-</script>
-
-</body>
-</html>
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 8px;
-      border-radius: 6px;
-      border: none;
-      background: #111827;
-      color: white;
-    }
-
-    .review {
-      background: #111827;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-    }
-
-    .smallbtn {
-      width: auto;
-      padding: 5px 10px;
-      margin-right: 5px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .fps {
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .musicBox {
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: #3b82f6;
-      padding: 10px;
-      border-radius: 10px;
-      width: 200px;
-    }
-
-    .hidden { display: none; }
-  </style>
-</head>
-
-<body>
-
-<!-- AUDIO -->
-<audio id="bgm" loop>
-  <source id="song" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3" type="audio/mpeg">
-</audio>
-
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="logo">🎮 Launcher</div>
-
-  <div class="nav">
-    <button onclick="show('home')">Home</button>
-    <button onclick="show('boost')">Boost</button>
-    <button onclick="show('reviews')">Reviews</button>
-  </div>
-</div>
-
-<!-- MAIN -->
-<div class="main">
-
-  <div id="home">
-    <div class="card">
-      <h2>Welcome 👋</h2>
-      <p>Launcher with dynamic music system</p>
-    </div>
-  </div>
-
-  <div id="boost" class="hidden">
-    <div class="card">
-      <h3>⚡ FPS Boost</h3>
-
-      <button class="green" onclick="setMode('potato')">🥔 Potato Mode</button>
-      <button class="blue" onclick="setMode('balanced')">⚖️ Balanced Mode</button>
-
-      <p class="fps" id="fps">FPS Boost: 0%</p>
-    </div>
-  </div>
-
-  <div id="reviews" class="hidden">
-    <div class="card">
-      <h3>💬 Reviews</h3>
-
-      <input id="name" placeholder="Name">
-      <input id="text" placeholder="Opinion">
-
-      <button class="green" onclick="add()">Submit</button>
-
-      <div id="list"></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- MUSIC CONTROL -->
-<div class="musicBox">
-  <button onclick="toggleMusic(this)">▶ Play Music</button>
-  <input type="range" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
-</div>
-
-<script>
-
-const music = document.getElementById("bgm");
-let playing = false;
-
-/* MUSIC */
-function toggleMusic(btn) {
-  if (!playing) {
-    music.play();
-    btn.innerText = "🔇 Mute Music";
-    playing = true;
-  } else {
-    music.pause();
-    btn.innerText = "▶ Play Music";
-    playing = false;
-  }
-}
-
-function setVolume(v) {
-  music.volume = v;
-}
-
-/* MODE MUSIC CHANGE */
-function setMode(mode) {
-
-  if (mode === "potato") {
-    document.getElementById("fps").innerText = "FPS Boost: +80%";
-
-    document.getElementById("song").src =
-      "https://cdn.pixabay.com/download/audio/2022/03/15/audio_3c9a7b.mp3"; // mais leve
-
-  } else {
-    document.getElementById("fps").innerText = "FPS Boost: +40%";
-
-    document.getElementById("song").src =
-      "https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3";
-  }
-
-  music.load();
-  music.play();
-}
-
-/* NAV */
-function show(page) {
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("boost").classList.add("hidden");
-  document.getElementById("reviews").classList.add("hidden");
-
-  document.getElementById(page).classList.remove("hidden");
-}
-
-/* REVIEWS */
-function add() {
-  let n = document.getElementById("name").value;
-  let t = document.getElementById("text").value;
-
-  if (!n || !t) return;
-
-  let div = document.createElement("div");
-  div.className = "review";
-
-  div.innerHTML = `
-    <b>${n}</b><br>${t}<br>
-    <button class="smallbtn blue" onclick="edit(this)">Edit</button>
-    <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
-  `;
-
-  document.getElementById("list").appendChild(div);
-}
-
-/* EDIT */
-function edit(btn) {
-  let box = btn.parentElement;
-  let old = box.innerText.split("\n")[1];
-
-  let newText = prompt("Edit:", old);
-
-  if (newText) {
-    box.innerHTML = `
-      <b>${box.querySelector("b").innerText}</b><br>${newText}<br>
-      <button class="smallbtn blue" onclick="edit(this)">Edit</button>
-      <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
-    `;
-  }
-}
-
-</script>
-
-</body>
-</html>
+    btn.innerText = "🔇 M
