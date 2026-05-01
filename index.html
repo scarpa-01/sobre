@@ -46,7 +46,7 @@ body {
   margin-bottom: 15px;
 }
 
-/* INPUT + BUTTON */
+/* INPUT + SELECT */
 input, select {
   width: 100%;
   padding: 10px;
@@ -57,6 +57,7 @@ input, select {
   color: white;
 }
 
+/* BUTTON */
 button {
   width: 100%;
   padding: 12px;
@@ -138,6 +139,21 @@ button {
 
 let members = JSON.parse(localStorage.getItem("members") || "[]");
 
+/* INIT */
+function init() {
+  let name = localStorage.getItem("username");
+  let status = localStorage.getItem("status");
+
+  if (name) {
+    showApp();
+    loadProfile(name, status);
+  } else {
+    showLogin();
+  }
+
+  render();
+}
+
 /* CREATE PROFILE */
 function createProfile() {
   let name = document.getElementById("nameInput").value;
@@ -148,30 +164,31 @@ function createProfile() {
   localStorage.setItem("username", name);
   localStorage.setItem("status", status);
 
-  loadProfile();
+  loadProfile(name, status);
+  showApp();
+}
 
+/* SHOW/HIDE */
+function showApp() {
   document.getElementById("login").style.display = "none";
   document.getElementById("app").style.display = "block";
 }
 
-/* LOAD PROFILE */
-function loadProfile() {
-  let name = localStorage.getItem("username");
-  let status = localStorage.getItem("status");
+function showLogin() {
+  document.getElementById("login").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+}
 
+/* PROFILE */
+function loadProfile(name, status) {
   document.getElementById("profileName").innerText = "👤 " + name;
 
-  if (status === "online") {
-    document.getElementById("profileStatus").innerText = "🟢 Online";
-  }
+  let text = "🟢 Online";
 
-  if (status === "dnd") {
-    document.getElementById("profileStatus").innerText = "🌙 Não incomodar";
-  }
+  if (status === "dnd") text = "🌙 Não incomodar";
+  if (status === "offline") text = "⚫ Offline";
 
-  if (status === "offline") {
-    document.getElementById("profileStatus").innerText = "⚫ Offline";
-  }
+  document.getElementById("profileStatus").innerText = text;
 }
 
 /* MEMBERS */
@@ -183,7 +200,6 @@ function addMember() {
   localStorage.setItem("members", JSON.stringify(members));
 
   document.getElementById("memberName").value = "";
-
   render();
 }
 
@@ -199,18 +215,8 @@ function render() {
   });
 }
 
-render();
-
-/* AUTO LOGIN */
-window.onload = function () {
-  let name = localStorage.getItem("username");
-
-  if (name) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    loadProfile();
-  }
-};
+/* START */
+init();
 
 </script>
 
