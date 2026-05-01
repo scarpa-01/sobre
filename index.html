@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Game Launcher</title>
+<title>Mini Social Server</title>
 
 <style>
 body {
@@ -11,76 +11,19 @@ body {
   font-family: Arial;
   background: #0b0f17;
   color: white;
-  display: flex;
 }
 
-/* MOBILE FIX TOTAL */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px;
-  }
-
-  .nav {
-    display: flex;
-    gap: 10px;
-  }
-
-  .nav button {
-    width: auto;
-    margin: 0;
-  }
-
-  .main {
-    padding: 10px;
-  }
-
-  .musicBox {
-    width: 160px;
-    bottom: 10px;
-    right: 10px;
-  }
-}
-
-.sidebar {
-  width: 220px;
+header {
   background: #111827;
-  height: 100vh;
-  padding: 20px;
-}
-
-.logo {
-  font-size: 20px;
+  padding: 15px;
+  text-align: center;
   font-weight: bold;
-  margin-bottom: 20px;
 }
 
-.nav button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #1f2937;
-  color: white;
-  cursor: pointer;
-}
-
-.nav button:hover {
-  background: #3b82f6;
-}
-
-.main {
-  flex: 1;
-  padding: 20px;
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 15px;
 }
 
 .card {
@@ -90,22 +33,9 @@ body {
   margin-bottom: 15px;
 }
 
-button {
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.green { background: #22c55e; }
-.blue { background: #3b82f6; }
-.red { background: #ef4444; }
-
-input {
+input, textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   margin-top: 8px;
   border-radius: 6px;
   border: none;
@@ -113,7 +43,16 @@ input {
   color: white;
 }
 
-.review {
+button {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.post {
   background: #111827;
   padding: 10px;
   margin-top: 10px;
@@ -121,91 +60,4 @@ input {
 }
 
 .smallbtn {
-  width: auto;
-  padding: 5px 10px;
-  margin-right: 5px;
-  border-radius: 5px;
-}
-
-.fps {
-  color: #22c55e;
-  font-weight: bold;
-}
-
-.musicBox {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  background: #3b82f6;
-  padding: 10px;
-  border-radius: 10px;
-}
-.hidden { display: none; }
-</style>
-</head>
-
-<body>
-
-<audio id="bgm" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1b9c3c0a0c.mp3" type="audio/mpeg">
-</audio>
-
-<div class="sidebar">
-  <div class="logo">🎮 Server</div>
-
-  <div class="nav">
-    <button onclick="show('home')">Home</button>
-    <button onclick="show('boost')">Boost</button>
-    <button onclick="show('reviews')">Reviews</button>
-  </div>
-</div>
-
-<div class="main">
-
-  <div id="home">
-    <div class="card">
-      <h2>Welcome 👋</h2>
-      <p>Mobile fixed launcher server</p>
-    </div>
-  </div>
-
-  <div id="boost" class="hidden">
-    <div class="card">
-      <h3>⚡ FPS Boost</h3>
-
-      <button class="green" onclick="setMode('potato')">🥔 Potato</button>
-      <button class="blue" onclick="setMode('balanced')">⚖️ Balanced</button>
-
-      <p class="fps" id="fps">FPS Boost: 0%</p>
-    </div>
-  </div>
-
-  <div id="reviews" class="hidden">
-    <div class="card">
-      <h3>💬 Reviews</h3>
-
-      <input id="name" placeholder="Name">
-      <input id="text" placeholder="Opinion">
-
-      <button class="green" onclick="add()">Submit</button>
-
-      <div id="list"></div>
-    </div>
-  </div>
-
-</div>
-
-<div class="musicBox">
-  <button onclick="toggleMusic(this)">▶ Play</button>
-  <input type="range" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
-</div>
-
-<script>
-
-const music = document.getElementById("bgm");
-let playing = false;
-
-function toggleMusic(btn) {
-  if (!playing) {
-    music.play();
-    btn.innerText = "🔇 M
+  padding: 5
