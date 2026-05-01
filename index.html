@@ -13,7 +13,7 @@
     }
 
     .banner {
-      padding: 60px 20px;
+      padding: 50px 20px;
     }
 
     .title {
@@ -28,7 +28,7 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 750px;
       margin: auto;
     }
 
@@ -58,7 +58,22 @@
     .green { background: #22c55e; color: white; }
     .blue { background: #3b82f6; color: white; }
 
-    /* Toast */
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    .review {
+      background: #222;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -81,21 +96,35 @@
 
 <div class="banner">
   <div class="title">🥔 FPS BOOST PACK</div>
-  <p>Performance tool for Roblox</p>
+  <p>Optimize Roblox performance easily</p>
 </div>
 
 <div class="container">
 
+  <!-- FPS MODE -->
   <div class="card">
-    <h3>🥔 Potato Mode</h3>
-    <p>Maximum FPS, lowest graphics</p>
-    <button class="green" onclick="copyPotato()">Copy Config</button>
+    <h3>⚡ Modes</h3>
+
+    <button class="green" onclick="copyPotato()">🥔 Potato Mode</button>
+    <button class="blue" onclick="copyBalanced()">⚖️ Balanced Mode</button>
   </div>
 
+  <!-- INFO -->
   <div class="card">
-    <h3>⚖️ Balanced Mode</h3>
-    <p>Good FPS + visuals</p>
-    <button class="blue" onclick="copyBalanced()">Copy Config</button>
+    <h3>🧠 What it does</h3>
+    <p>Reduces graphics load and improves FPS stability in Roblox games.</p>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="card">
+    <h3>💬 Community Opinions</h3>
+
+    <input id="name" placeholder="Your name">
+    <input id="opinion" placeholder="Your opinion...">
+
+    <button class="green" onclick="addOpinion()">Submit</button>
+
+    <div id="list"></div>
   </div>
 
 </div>
@@ -121,7 +150,7 @@ function copyPotato() {
   "DFIntTextureQualityOverride": "0"
 }
   `);
-  showToast("🥔 Potato config copied!");
+  showToast("🥔 Potato copied!");
 }
 
 function copyBalanced() {
@@ -131,7 +160,23 @@ function copyBalanced() {
   "FIntRenderShadowIntensity": "0"
 }
   `);
-  showToast("⚖️ Balanced config copied!");
+  showToast("⚖️ Balanced copied!");
+}
+
+function addOpinion() {
+  const name = document.getElementById("name").value;
+  const text = document.getElementById("opinion").value;
+
+  if (!name || !text) return;
+
+  const div = document.createElement("div");
+  div.className = "review";
+  div.innerHTML = "<b>" + name + ":</b><br>" + text;
+
+  document.getElementById("list").appendChild(div);
+
+  document.getElementById("name").value = "";
+  document.getElementById("opinion").value = "";
 }
 </script>
 
