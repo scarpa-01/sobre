@@ -7,43 +7,43 @@
     body {
       margin: 0;
       font-family: Arial;
-      background: #0b0b0f;
+      background: radial-gradient(circle at top, #111827, #0b0b0f);
       color: white;
-    }
-
-    .banner {
-      background: linear-gradient(90deg, #0f172a, #1e293b);
-      padding: 60px 20px;
       text-align: center;
     }
 
-    .title {
-      font-size: 36px;
-      font-weight: bold;
+    .banner {
+      padding: 60px 20px;
     }
 
-    .subtitle {
-      opacity: 0.7;
-      margin-top: 5px;
+    .title {
+      font-size: 38px;
+      font-weight: bold;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #3b82f6; }
+      to { text-shadow: 0 0 20px #22c55e; }
     }
 
     .container {
-      max-width: 800px;
+      max-width: 700px;
       margin: auto;
-      padding: 20px;
     }
 
     .card {
-      background: #1c1c25;
+      background: rgba(255,255,255,0.05);
       padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
+      margin: 15px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
     }
 
     button {
       padding: 12px;
-      margin-top: 10px;
       width: 100%;
+      margin-top: 10px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -52,37 +52,27 @@
     }
 
     button:hover {
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
 
     .green { background: #22c55e; color: white; }
     .blue { background: #3b82f6; color: white; }
 
-    .tag {
-      display: inline-block;
-      background: #333;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      margin-top: 10px;
-    }
-
-    .reviews {
-      margin-top: 20px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .review {
-      background: #15151d;
-      padding: 10px;
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f2937;
+      padding: 10px 15px;
       border-radius: 8px;
-      font-size: 14px;
-      opacity: 0.9;
+      opacity: 0;
+      transition: 0.3s;
     }
 
-    .stars {
-      color: gold;
+    .show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -90,62 +80,58 @@
 <body>
 
 <div class="banner">
-  <div class="title">🥔 FPS Boost Pack</div>
-  <div class="subtitle">Optimize Roblox performance for low-end PCs</div>
-  <div class="tag">Free Tool • Community Configs</div>
+  <div class="title">🥔 FPS BOOST PACK</div>
+  <p>Performance tool for Roblox</p>
 </div>
 
 <div class="container">
 
   <div class="card">
-    <h2>⚡ Install / Copy Config</h2>
-    <p>Choose your performance mode</p>
-
-    <button class="green" onclick="copyPotato()">🥔 Potato Mode</button>
-    <button class="blue" onclick="copyBalanced()">⚖️ Balanced Mode</button>
+    <h3>🥔 Potato Mode</h3>
+    <p>Maximum FPS, lowest graphics</p>
+    <button class="green" onclick="copyPotato()">Copy Config</button>
   </div>
 
   <div class="card">
-    <h3>📊 Reviews</h3>
-
-    <div class="reviews">
-      <div class="review">
-        <span class="stars">★★★★★</span><br>
-        “My FPS went from 30 to 80 on my old laptop”
-      </div>
-
-      <div class="review">
-        <span class="stars">★★★★☆</span><br>
-        “Very useful for battleground games”
-      </div>
-
-      <div class="review">
-        <span class="stars">★★★★★</span><br>
-        “Simple and actually works for lag”
-      </div>
-    </div>
+    <h3>⚖️ Balanced Mode</h3>
+    <p>Good FPS + visuals</p>
+    <button class="blue" onclick="copyBalanced()">Copy Config</button>
   </div>
 
 </div>
 
+<div id="toast" class="toast">Copied!</div>
+
 <script>
+function showToast(text) {
+  const toast = document.getElementById("toast");
+  toast.innerText = text;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1500);
+}
+
 function copyPotato() {
-  prompt("Copy this config:", `
+  navigator.clipboard.writeText(`
 {
   "DFIntTaskSchedulerTargetFps": "60",
   "FIntRenderShadowIntensity": "0",
   "DFIntTextureQualityOverride": "0"
 }
   `);
+  showToast("🥔 Potato config copied!");
 }
 
 function copyBalanced() {
-  prompt("Copy this config:", `
+  navigator.clipboard.writeText(`
 {
   "DFIntTaskSchedulerTargetFps": "120",
   "FIntRenderShadowIntensity": "0"
 }
   `);
+  showToast("⚖️ Balanced config copied!");
 }
 </script>
 
