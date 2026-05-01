@@ -5,6 +5,10 @@
 <title>Mini Chat Hub</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial;
@@ -12,6 +16,7 @@ body {
   color: white;
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* SIDEBAR */
@@ -28,6 +33,7 @@ body {
   background: #1f2937;
   border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .channel:hover {
@@ -39,12 +45,14 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .header {
-  padding: 15px;
+  padding: 12px;
   background: #111827;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .messages {
@@ -58,6 +66,8 @@ body {
   padding: 8px;
   margin-top: 8px;
   border-radius: 8px;
+  font-size: 14px;
+  word-break: break-word;
 }
 
 /* INPUT */
@@ -74,6 +84,8 @@ input {
   border-radius: 6px;
   background: #0f172a;
   color: white;
+  font-size: 14px;
+  outline: none;
 }
 
 button {
@@ -84,6 +96,7 @@ button {
   background: #3b82f6;
   color: white;
   cursor: pointer;
+  font-size: 14px;
 }
 
 /* LOGIN */
@@ -99,8 +112,34 @@ button {
 }
 
 .login input {
-  width: 200px;
+  width: 220px;
   margin: 5px;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .channel {
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .chat {
+    height: calc(100vh - 140px);
+  }
 }
 </style>
 </head>
@@ -127,7 +166,7 @@ button {
   <h4>Amigos</h4>
 
   <input id="friendName" placeholder="Adicionar amigo">
-  <button onclick="addFriend()">Adicionar</button>
+  <button onclick="addFriend()">+</button>
 
   <div id="friendsList"></div>
 
@@ -155,7 +194,7 @@ let room = "geral";
 let data = JSON.parse(localStorage.getItem("chat") || "{}");
 let friends = JSON.parse(localStorage.getItem("friends") || "[]");
 
-/* ENTRAR */
+/* LOGIN */
 function enter() {
   let name = document.getElementById("name").value;
   let emoji = document.getElementById("emoji").value;
@@ -172,7 +211,7 @@ function enter() {
   renderFriends();
 }
 
-/* TROCAR SALA */
+/* SALAS */
 function switchRoom(r) {
   room = r;
   document.getElementById("roomName").innerText = "💬 " + r;
@@ -182,7 +221,7 @@ function switchRoom(r) {
   render();
 }
 
-/* ENVIAR MENSAGEM */
+/* CHAT */
 function send() {
   let text = document.getElementById("msg").value;
   if (!text) return;
@@ -202,7 +241,6 @@ function send() {
   render();
 }
 
-/* MOSTRAR CHAT */
 function render() {
   let box = document.getElementById("messages");
   box.innerHTML = "";
@@ -230,4 +268,34 @@ function addFriend() {
 
   document.getElementById("friendName").value = "";
 
-  render
+  renderFriends();
+}
+
+/* LISTA AMIGOS */
+function renderFriends() {
+  let box = document.getElementById("friendsList");
+  box.innerHTML = "";
+
+  friends.forEach(f => {
+    let div = document.createElement("div");
+    div.className = "channel";
+    div.innerText = "👤 " + f;
+
+    div.onclick = () => {
+      room = "dm_" + f;
+
+      if (!data[room]) data[room] = [];
+
+      document.getElementById("roomName").innerText = "💌 DM com " + f;
+
+      render();
+    };
+
+    box.appendChild(div);
+  });
+}
+
+</script>
+
+</body>
+</html>
