@@ -60,4 +60,74 @@ button {
 }
 
 .smallbtn {
-  padding: 5
+  padding: 5px 8px;
+  margin-right: 5px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.blue { background: #3b82f6; color: white; }
+.red { background: #ef4444; color: white; }
+
+</style>
+</head>
+
+<body>
+
+<header>💬 Mini Social Server</header>
+
+<div class="container">
+
+  <div class="card">
+    <h3>Criar Post</h3>
+
+    <input id="name" placeholder="Teu nome">
+    <textarea id="msg" placeholder="Escreve algo..."></textarea>
+
+    <button class="blue" onclick="addPost()">Postar</button>
+  </div>
+
+  <div id="feed"></div>
+
+</div>
+
+<script>
+
+function addPost() {
+  let name = document.getElementById("name").value;
+  let msg = document.getElementById("msg").value;
+
+  if (!name || !msg) return;
+
+  let div = document.createElement("div");
+  div.className = "post";
+
+  div.innerHTML = `
+    <b>${name}</b><br><br>
+    <span>${msg}</span><br><br>
+
+    <button class="smallbtn blue" onclick="edit(this)">Edit</button>
+    <button class="smallbtn red" onclick="this.parentElement.remove()">Delete</button>
+  `;
+
+  document.getElementById("feed").prepend(div);
+
+  document.getElementById("msg").value = "";
+}
+
+function edit(btn) {
+  let post = btn.parentElement;
+  let text = post.querySelector("span").innerText;
+
+  let newText = prompt("Edit post:", text);
+
+  if (newText) {
+    post.querySelector("span").innerText = newText;
+  }
+}
+
+</script>
+
+</body>
+</html>
