@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Links</title>
 
 <style>
@@ -27,19 +27,24 @@ body{
   margin:0;
   font-family:system-ui;
   color:var(--text);
+
   min-height:100vh;
+  min-height:100dvh; /* FIX MOBILE */
+  
   display:flex;
   justify-content:center;
   align-items:center;
+
   background:linear-gradient(135deg,var(--bg1),var(--bg2));
   overflow:hidden;
 }
 
-/* 🌌 PARTICLES */
+/* canvas FIX */
 canvas{
   position:fixed;
   inset:0;
   z-index:0;
+  pointer-events:none;
 }
 
 /* glow */
@@ -67,6 +72,7 @@ body::before{
   z-index:2;
   text-align:center;
   animation:fade .6s ease;
+  padding:20px;
 }
 
 @keyframes fade{
@@ -91,11 +97,11 @@ body::before{
   opacity:.75;
 }
 
-/* LINKS */
 .links{
   display:flex;
   flex-direction:column;
   gap:14px;
+  align-items:center;
 }
 
 .card{
@@ -105,29 +111,27 @@ body::before{
 
   background:var(--card);
   backdrop-filter:blur(16px);
-
   border:1px solid rgba(255,255,255,0.08);
 
   color:var(--text);
   text-decoration:none;
-
   cursor:pointer;
 
   transition:.2s ease;
+  font-size:16px;
 }
 
 .card:hover{
   transform:translateY(-5px);
   border-color:var(--accent);
-  box-shadow:0 15px 40px rgba(0,0,0,.3);
 }
 
 /* SETTINGS */
 .settings{
   position:fixed;
-  top:16px;
-  right:16px;
-  z-index:3;
+  top:calc(env(safe-area-inset-top) + 12px);
+  right:12px;
+  z-index:5;
 }
 
 .gear{
@@ -142,10 +146,6 @@ body::before{
   backdrop-filter:blur(12px);
 }
 
-.gear:hover{
-  transform:rotate(25deg);
-}
-
 .panel{
   margin-top:10px;
   display:none;
@@ -153,16 +153,18 @@ body::before{
   padding:12px;
   border-radius:14px;
   backdrop-filter:blur(14px);
+  min-width:140px;
 }
 
 .panel button,
 .panel select{
   width:100%;
   margin-top:8px;
-  padding:8px;
+  padding:10px;
   border:none;
   border-radius:10px;
   cursor:pointer;
+  font-size:14px;
 }
 
 /* toast */
@@ -176,11 +178,10 @@ body::before{
   border-radius:14px;
   opacity:0;
   transition:.3s ease;
+  z-index:10;
 }
 
-#toast.show{
-  opacity:1;
-}
+#toast.show{opacity:1;}
 </style>
 </head>
 
@@ -197,19 +198,11 @@ body::before{
   </div>
 
   <div class="links">
+    <a class="card" href="https://discord.gg/TEU-LINK" target="_blank">💬 Discord</a>
 
-    <a class="card" href="https://discord.gg/TEU-LINK" target="_blank">
-      💬 Discord
-    </a>
+    <button class="card" onclick="copyDiscord()">📋 Copiar link Discord</button>
 
-    <button class="card" onclick="copyDiscord()">
-      📋 Copiar link Discord
-    </button>
-
-    <a class="card" href="https://github.com/scarpa-01" target="_blank">
-      🐙 GitHub
-    </a>
-
+    <a class="card" href="https://github.com/scarpa-01" target="_blank">🐙 GitHub</a>
   </div>
 
   <div class="members">
@@ -218,9 +211,7 @@ body::before{
 
 </div>
 
-<!-- SETTINGS -->
 <div class="settings">
-
   <div class="gear" onclick="togglePanel()">⚙️</div>
 
   <div class="panel" id="panel">
@@ -232,7 +223,6 @@ body::before{
       <option value="#b84fff">Roxo</option>
     </select>
   </div>
-
 </div>
 
 <div id="toast">✅ Copiado!</div>
@@ -254,10 +244,7 @@ function changeColor(c){
 
 /* panel */
 function togglePanel(){
-  panel.style.display =
-    panel.style.display === "block"
-      ? "none"
-      : "block";
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
 }
 
 /* toast */
@@ -282,7 +269,7 @@ function updateTime(){
 updateTime();
 setInterval(updateTime,1000);
 
-/* members (needs discord widget enabled) */
+/* members */
 async function loadMembers(){
   try{
     const res = await fetch("https://discord.com/api/guilds/TEU_SERVER_ID/widget.json");
@@ -294,24 +281,31 @@ async function loadMembers(){
 }
 loadMembers();
 
-/* particles */
+/* PARTICLES FIXED */
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
 let particles = [];
 
-for(let i=0;i<50;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*1.6,
-    dx:(Math.random()-0.5)*0.25,
-    dy:(Math.random()-0.5)*0.25
-  });
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  particles = [];
+  for(let i=0;i<50;i++){
+    particles.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*1.6,
+      dx:(Math.random()-0.5)*0.25,
+      dy:(Math.random()-0.5)*0.25
+    });
+  }
 }
+
+window.addEventListener("resize", resize);
+window.addEventListener("orientationchange", resize);
+resize();
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
