@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="format-detection" content="telephone=no">
 <title>Game Hub</title>
 
 <style>
@@ -13,13 +12,6 @@
   --card:rgba(255,255,255,0.06);
   --text:#fff;
   --accent:#4f7cff;
-}
-
-body.light{
-  --bg1:#f4f6fb;
-  --bg2:#e7ebf5;
-  --card:rgba(255,255,255,0.85);
-  --text:#111;
 }
 
 *{box-sizing:border-box;}
@@ -33,155 +25,64 @@ body{
   justify-content:center;
   align-items:center;
   background:linear-gradient(135deg,var(--bg1),var(--bg2));
-  overflow:hidden;
   font-size:18px;
 }
 
-/* glow */
-body::before{
-  content:"";
-  position:absolute;
-  width:600px;
-  height:600px;
-  background:var(--accent);
-  border-radius:50%;
-  filter:blur(200px);
-  opacity:.18;
-  top:-200px;
-  left:-200px;
-}
-
 .container{
-  position:relative;
-  z-index:2;
   text-align:center;
   padding:20px;
   width:100%;
+  max-width:420px;
 }
 
 .title{
-  font-size:34px;
+  font-size:38px;
   font-weight:800;
+  margin-bottom:8px;
 }
 
-.status{
-  margin:10px 0 25px;
+.subtitle{
   opacity:.7;
-  font-size:16px;
+  font-size:14px;
+  margin-bottom:25px;
 }
 
-.section-title{
+.section{
   margin-top:20px;
   font-size:14px;
   opacity:.6;
 }
 
-.hub{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  align-items:center;
-}
-
-/* CARDS */
+/* cards */
 .card{
-  width:300px;
+  display:block;
+  width:100%;
   padding:18px;
+  margin:12px 0;
   border-radius:16px;
   background:var(--card);
-  backdrop-filter:blur(16px);
+  backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,0.08);
   color:var(--text);
   text-decoration:none;
-  cursor:pointer;
-  transition:.2s;
   font-size:18px;
+  transition:.2s;
 }
 
 .card:hover{
-  transform:translateY(-4px);
+  transform:scale(1.03);
   border-color:var(--accent);
 }
 
-/* SETTINGS */
-.settings{
-  position:fixed;
-  top:12px;
-  right:12px;
-  z-index:10;
+/* github highlight */
+.github{
+  border:1px solid var(--accent);
 }
 
-.gear{
-  width:44px;
-  height:44px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  border-radius:12px;
-  background:var(--card);
-  cursor:pointer;
-}
-
-.panel{
-  display:none;
-  margin-top:10px;
-  background:var(--card);
-  padding:12px;
-  border-radius:12px;
-}
-
-.panel button,
-.panel select{
-  width:100%;
-  margin-top:8px;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-}
-
-/* toast */
-#toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--card);
-  padding:12px 18px;
-  border-radius:12px;
-  opacity:0;
-  transition:.3s;
-}
-
-#toast.show{opacity:1;}
-
-/* 📱 MOBILE FIX REAL */
-@media (max-width: 600px) {
-
-  body{
-    font-size:20px;
-  }
-
-  .container{
-    padding:12px;
-  }
-
-  .title{
-    font-size:42px;
-  }
-
-  .status{
-    font-size:18px;
-  }
-
-  .card{
-    width:92%;
-    font-size:20px;
-    padding:20px;
-  }
-
-  .hub{
-    gap:16px;
-  }
+/* mobile fix */
+@media (max-width:600px){
+  .title{font-size:44px;}
+  .card{font-size:20px;}
 }
 </style>
 </head>
@@ -191,63 +92,25 @@ body::before{
 <div class="container">
 
   <div class="title">🎮 Game Hub</div>
-  <div class="status">🟢 online</div>
+  <div class="subtitle">Os meus jogos em ZIP</div>
 
-  <div class="section-title">Jogos</div>
+  <div class="section">🎮 JOGOS</div>
 
-  <div class="hub">
+  <a class="card" href="farm_life.zip" download>
+    🌾 Farm Life PRO<br>⬇️ Baixar ZIP
+  </a>
 
-    <a class="card" href="farm_life.zip" download>
-      🌾 Farm Life PRO <br>
-      ⬇️ Baixar ZIP
-    </a>
+  <a class="card" href="game2.zip" download>
+    🚀 Space Game<br>⬇️ Baixar ZIP
+  </a>
 
-    <a class="card" href="game2.zip" download>
-      🚀 Space Game <br>
-      ⬇️ Baixar ZIP
-    </a>
+  <div class="section">🔗 LINKS</div>
 
-    <a class="card" href="https://github.com/scarpa-01" target="_blank">
-      🐙 GitHub
-    </a>
-
-  </div>
+  <a class="card github" href="https://github.com/scarpa-01" target="_blank">
+    🐙 Meu GitHub
+  </a>
 
 </div>
-
-<!-- SETTINGS -->
-<div class="settings">
-  <div class="gear" onclick="togglePanel()">⚙️</div>
-
-  <div class="panel" id="panel">
-    <button onclick="toggleTheme()">Tema</button>
-    <select onchange="changeColor(this.value)">
-      <option value="#4f7cff">Azul</option>
-      <option value="#ff4f4f">Vermelho</option>
-      <option value="#4fff7c">Verde</option>
-      <option value="#b84fff">Roxo</option>
-    </select>
-  </div>
-</div>
-
-<div id="toast">✔ feito</div>
-
-<script>
-
-function toggleTheme(){
-  document.body.classList.toggle("light");
-}
-
-function changeColor(c){
-  document.documentElement.style.setProperty("--accent",c);
-}
-
-function togglePanel(){
-  const p=document.getElementById("panel");
-  p.style.display = p.style.display==="block"?"none":"block";
-}
-
-</script>
 
 </body>
 </html>
